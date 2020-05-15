@@ -39,7 +39,10 @@ def init_db():
 		subsection text not null default '',
 		teacher text not null default 'Staff',
 		cap int not null,
-		unique(name, block, subsection),
+		course_code int,
+		room text,
+		category int,
+		unique(name, block, subsection, teacher),
 		check(cap > 0)
 	);
 	""")
@@ -47,7 +50,7 @@ def init_db():
 	create trigger if not exists classes_same_cap
 	before insert on classes
 	begin
-		select raise(fail, "Classes with the same name and block must have the same cap") from classes where block = NEW.block and name = NEW.name and cap != NEW.cap;
+		select raise(fail, "Classes with the same name, block and teacher must have the same cap") from classes where block = NEW.block and name = NEW.name and teacher = NEW.teacher and cap != NEW.cap;
 	end;
 	""")
 	c.execute("create index if not exists classes_name_block on classes (name, block);")
@@ -63,9 +66,10 @@ def init_db():
 	create table if not exists student_schedules (
 		stamp_id int primary key, -- for bryan
 		student_id int, -- FK to students
+		block char, -- composite FK to classes
 		class_name text, -- composite FK to classes
 		subsection text, -- composite FK to classes
-		block char, -- composite FK to classes
+		teacher text, -- composite FK to classes
 		foreign key(student_id) references students(student_id)
 	);
 	""")
@@ -73,10 +77,10 @@ def init_db():
 	create trigger if not exists student_schedules_fk
 	before insert on student_schedules
 	begin
-		select (case when (select 1 from classes where block = NEW.block and name = NEW.class_name and subsection = NEW.subsection) is null
+		select (case when (select 1 from classes where block = NEW.block and name = NEW.class_name and subsection = NEW.subsection and teacher = NEW.teacher) is null
 			then raise(fail, "Attempt to add a row to student_schedules that does not reference a row in classes")
 			else 1 end);
-		select (case when (select cap from classes where block = NEW.block and name = NEW.class_name limit 1) = (select count(*) from student_schedules where block = NEW.block and class_name = NEW.class_name)
+		select (case when (select cap from classes where block = NEW.block and name = NEW.class_name and teacher = NEW.teacher limit 1) <= (select count(*) from student_schedules where block = NEW.block and class_name = NEW.class_name and teacher = NEW.teacher)
 			then raise(fail, "Adding a new row would exceed the cap for the class")
 			else 1 end);
 		select (case when (select 1 from student_schedules where student_id = NEW.student_id and block = NEW.block and class_name = NEW.class_name) is not null
