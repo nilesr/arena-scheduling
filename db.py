@@ -24,7 +24,9 @@ def query(db, q, *args, symbolize_names =  True):
 def commit(db, q, *args, symbolize_names =  True):
 	c = db.cursor()
 	c.execute(q, args) # no splat!
+	r = c.lastrowid
 	db.commit()
+	return r
 
 def get_db():
 	return sqlite3.connect(root + "/schedule.db")
@@ -85,6 +87,15 @@ def init_db():
 			else 1 end);
 		select (case when (select 1 from student_schedules where student_id = NEW.student_id and block = NEW.block and class_name = NEW.class_name) is not null
 			then raise(fail, "Attempt to add a new ticket for a class you already have a ticket for")
+			else 1 end);
+	end;
+	""")
+	c.execute("""
+	create trigger if not exists student_schedules_max_tickets
+	before insert on student_schedules
+	begin
+		select (case when (select count(*) from student_schedules where student_id = NEW.student_id) >= 11
+			then raise(fail, "You are already in the maximum number of classes")
 			else 1 end);
 	end;
 	""")

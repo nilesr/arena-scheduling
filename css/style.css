@@ -38,3 +38,16 @@ body {
     margin-right: 5rem
 }
 
+.tabbutton:first-child {
+    border-radius: 7px 0 0 7px;
+}
+
+.tabbutton:last-child {
+    border-radius: 0 7px 7px 0;
+}
+
+a.button.button-large.tabbutton.button-outline:hover {
+    background-color: #4c566a;
+	color: white;
+}
+

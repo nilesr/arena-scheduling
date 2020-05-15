@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os, sys,time
-from bottle import request, response, route, static_file, post, run, abort, error
+from bottle import request, response, route, static_file, post, run, abort, error, put
 sys.path.insert(0, ".")
 import auth
 from db import get_db, init_db, query, commit
@@ -45,7 +45,6 @@ def static(filename):
 
 @post("/login")
 def login():
-	time.sleep(0.5) # simulate network conditions - TODO remove me
 	succ, stat = auth.try_login(request.forms.get("user"), request.forms.get("pass"))
 	if not succ:
 		abort(403, stat)
@@ -63,10 +62,27 @@ def logout(db):
 @route("/tickets")
 @authenticated
 def get_tickets(db, user):
-	time.sleep(0.5) # simulate network conditions - TODO remove me
 	tickets = query(db, "select * from student_schedules where student_id = ?", user, symbolize_names=False)
 	name = query(db, "select student_username from students where student_id = ?", user)[0].student_username
 	return {"tickets": tickets, "name": name}
+
+@put("/tickets")
+@time_checked
+def put_ticket(db, user):
+	block = request.forms.get("block")
+	if len(block) != 1 or block not in "ABCDEFGHP":
+		abort(400, "Invalid Block")
+	name = request.forms.get("name")
+	subsection = request.forms.get("subsection")
+	teacher = request.forms.get("teacher")
+	r = query(db, "select * from classes where block = ? and name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher)
+	if len(r) == 0:
+		abort(400, "That class doesn't exist")
+	if len(r) > 1:
+		abort(500, "Database invariant violated")
+	row = commit(db, "insert into student_schedules (student_id, block, name, subsection, teacher) values (?, ?, ?, ?, ?)", user, block, name, subsection, teacher)
+	return {"ticket": row}
+
 
 @route("/classes")
 @with_db
