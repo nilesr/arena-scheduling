@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 import os, sqlite3, collections
 
-KEYWORDS = {"from", "except", "if", "else", "elif", "return"}
 root = os.path.dirname(os.path.realpath(__file__))
 
-def _try_symbolize_names(l):
-	if isinstance(l, list): return [_try_symbolize_names(i) for i in l]
-	if not isinstance(l, dict): return l
-	l = {k if k not in KEYWORDS else k + "_": _try_symbolize_names(v) for k, v in l.items()} # recurse
+def _try_symbolize_names_for_sql(l):
 	cls = collections.namedtuple("t", l.keys())
 	old_getitem = cls.__getitem__
 	cls.__getitem__ = lambda self, k: l[k] if isinstance(k, str) else old_getitem(self, k)
@@ -17,7 +13,7 @@ def _try_symbolize_names(l):
 def query(db, q, *args, symbolize_names =  True):
 	c = db.cursor()
 	c.execute(q, args) # no splat!
-	return (_try_symbolize_names if symbolize_names else lambda i: i)([{c.description[i][0]: v for i, v in enumerate(row)} for row in c.fetchall()])
+	return [(_try_symbolize_names_for_sql if symbolize_names else lambda i: i)({c.description[i][0]: v for i, v in enumerate(row)}) for row in c.fetchall()]
 
 def commit(db, q, *args, symbolize_names =  True):
 	c = db.cursor()

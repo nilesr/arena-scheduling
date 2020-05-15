@@ -1,0 +1,39 @@
+body {
+	margin: 0;
+}
+.navigation {
+	background: #f4f5f6;
+	border-bottom: 1px solid #d1d1d1;
+	margin: 0;
+	line-height: 5.2rem;
+}
+
+#loading {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(1,1,1,0.5);
+}
+#loading > div {
+	margin: 200px;
+	text-align: center;
+	color: white;
+}
+
+#mainContainer {
+	min-height: 450px;
+}
+
+.navigation-list {
+    list-style: none;
+}
+.navigation-link {
+	color: red;
+}
+.navigation-item {
+	float: left;
+    margin-right: 5rem
+}
+

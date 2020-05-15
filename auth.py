@@ -6,7 +6,7 @@ sys.path.remove(".")
 
 def try_login(student_id, password):
 	db = get_db()
-	if len(query(db, "select * from students where student_id = ?", student_id)) == 0:
+	if len(query(db, "select 1 as c from students where student_id = ?", str(student_id))) == 0:
 		db.close()
 		return False, "No user exists with the student ID " + student_id
 	if password != "pass":
@@ -21,8 +21,10 @@ def try_login(student_id, password):
 	return True, cookie.decode("utf-8")
 
 def try_auth(request):
+	c = request.get_cookie("auth")
+	if not c: return False
 	db = get_db()
-	r = query(db, "select student_id from sessions where session_id = ?", request.get_cookie("auth").encode("utf-8"))
+	r = query(db, "select student_id from sessions where session_id = ?", c.encode("utf-8"))
 	if len(r) == 0: return False
 	db.close()
 	return r[0].student_id
