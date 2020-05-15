@@ -35,20 +35,27 @@ def init_db():
 	c.execute("""
 	create table if not exists classes (
 		name text not null,
-		subsection text not null default '',
 		block char not null,
+		subsection text not null default '',
 		teacher text not null default 'Staff',
 		cap int not null,
 		unique(name, block, subsection),
 		check(cap > 0)
 	);
 	""")
+	c.execute("""
+	create trigger if not exists classes_same_cap
+	before insert on classes
+	begin
+		select raise(fail, "Classes with the same name and block must have the same cap") from classes where block = NEW.block and name = NEW.name and cap != NEW.cap;
+	end;
+	""")
 	c.execute("create index if not exists classes_name_block on classes (name, block);")
 	c.execute("""
 	create table if not exists students (
 		student_id int unique, -- PK
 		student_username text,
-		time_allowed_in datetime
+		time_allowed_in int
 	);
 	""")
 	c.execute("create index if not exists students_student_id on students (student_id);")
@@ -72,6 +79,9 @@ def init_db():
 		select (case when (select cap from classes where block = NEW.block and name = NEW.class_name limit 1) = (select count(*) from student_schedules where block = NEW.block and class_name = NEW.class_name)
 			then raise(fail, "Adding a new row would exceed the cap for the class")
 			else 1 end);
+		select (case when (select 1 from student_schedules where student_id = NEW.student_id and block = NEW.block and class_name = NEW.class_name) is not null
+			then raise(fail, "Attempt to add a new ticket for a class you already have a ticket for")
+			else 1 end);
 	end;
 	""")
 	c.execute("create index if not exists student_schedules_student_id on student_schedules (student_id);")
@@ -84,5 +94,7 @@ def init_db():
 	);
 	""")
 	c.execute("create index if not exists sessions_session_id on sessions (session_id);")
+	if len(c.execute("select 1 from students where student_id = ?", [941590]).fetchall()) == 0:
+		c.execute("insert into students (student_id, student_username, time_allowed_in) values (?, ?, ?)", [941590, "Niles Rogoff", 0])
 	db.commit()
 	db.close()
