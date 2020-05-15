@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, sys
+import os, sys,time
 from bottle import request, response, route, static_file, post, run, abort, error
 sys.path.insert(0, ".")
 import auth
@@ -35,6 +35,7 @@ def static(filename):
 
 @post("/login")
 def login():
+	time.sleep(0.5) # simulate network conditions - TODO remove me
 	succ, stat = auth.try_login(request.forms.get("user"), request.forms.get("pass"))
 	if not succ:
 		abort(403, stat)
@@ -53,6 +54,7 @@ def logout(db):
 @authenticated
 @with_db
 def get_tickets(db, user):
+	time.sleep(0.5) # simulate network conditions - TODO remove me
 	tickets = query(db, "select * from student_schedules where student_id = ?", user, symbolize_names=False)
 	name = query(db, "select student_username from students where student_id = ?", user)[0].student_username
 	return {"tickets": tickets, "name": name}

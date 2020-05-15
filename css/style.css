@@ -24,6 +24,7 @@ body {
 
 #mainContainer {
 	min-height: 450px;
+	padding-top: 20px;
 }
 
 .navigation-list {

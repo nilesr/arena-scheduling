@@ -14,7 +14,7 @@ var Login = (props) => {
 					<input placeholder="941590" name="username" id="username" />
 					<label htmlFor="password">School Password</label>
 					<input type="password" name="password" id="password" />
-					<input className="button-primary" type="submit" value="Send" />
+					<input className="button-primary" type="submit" value="Login" />
 				</fieldset>
 			</form>
 		</div>

@@ -12,14 +12,14 @@ class App extends React.Component {
 		this.tryLogin = this.tryLogin.bind(this)
 	}
 	checkTickets() {
-		this.setState({loading: true, ...this.state})
+		this.setState(s => {return {...s, loading: true}; })
 		get("/tickets",
 			(t) => this.setState(s => { return {...s, loading: false, loggedIn: true, tickets: t.tickets, name: t.name}; }),
 			(e) => this.setState(s => { return {...s, loading: false, loggedIn: false} }),
 		)
 	}
 	tryLogin(user, pass) {
-		this.setState({loading: true, ...this.state})
+		this.setState(s => {return {...s, loading: true}; })
 		post("/login",
 			{user: user, pass: pass},
 			(t) => {
@@ -48,7 +48,11 @@ class App extends React.Component {
 				</nav>
 				<section className="container" id="mainContainer">
 					{this.state.loading ? <Loading /> : null}
-					{!this.state.loggedIn ? <Login onSubmit={this.tryLogin} err={this.state.loginErr} /> : "You are logged in. You have " + this.state.tickets.length + " tickets"}
+					{this.state.loggedIn
+							? this.state.tickets !== false
+								? "You are logged in. You have " + this.state.tickets.length + " tickets"
+								: "Loading your tickets..."
+							: <Login onSubmit={this.tryLogin} err={this.state.loginErr} />}
 				</section>
 			</main>
 		)
