@@ -20,12 +20,10 @@ def try_login(student_id, password):
 	db.close()
 	return True, cookie.decode("utf-8")
 
-def try_auth(request):
+def try_auth(request, db):
 	c = request.get_cookie("auth")
 	if not c: return False
-	db = get_db()
 	r = query(db, "select student_id from sessions where session_id = ?", c.encode("utf-8"))
 	if len(r) == 0: return False
-	db.close()
 	return r[0].student_id
 

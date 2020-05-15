@@ -8,13 +8,6 @@ sys.path.remove(".")
 
 root = os.path.dirname(os.path.realpath(__file__))
 
-def authenticated(fn):
-	def newfn(*args, **kwargs):
-		user = auth.try_auth(request)
-		if not user: abort(403, "Permission denied")
-		return fn(user, *args, **kwargs)
-	return newfn
-
 def with_db(fn):
 	def newfn(*args, **kwargs):
 		db = get_db()
@@ -23,6 +16,23 @@ def with_db(fn):
 			return r
 		finally:
 			db.close()
+	return newfn
+
+def authenticated(fn):
+	@with_db
+	def newfn(db, *args, **kwargs):
+		user = auth.try_auth(request, db)
+		if not user: abort(403, "Permission denied")
+		return fn(db, user, *args, **kwargs)
+	return newfn
+
+def time_checked(fn):
+	@authenticated
+	def newfn(db, user, *args, **kwargs):
+		time_allowed = query(db, "select time_allowed_in from students where student_id = ?", user)[0].time_allowed_in
+		if time_allowed < time.time():
+			abort(403, {"error": "Too early", "time_allowed_in": time_allowed})
+		return fn(db, user, *args, **kwargs)
 	return newfn
 
 @route("/")
@@ -52,7 +62,6 @@ def logout(db):
 
 @route("/tickets")
 @authenticated
-@with_db
 def get_tickets(db, user):
 	time.sleep(0.5) # simulate network conditions - TODO remove me
 	tickets = query(db, "select * from student_schedules where student_id = ?", user, symbolize_names=False)
@@ -62,7 +71,7 @@ def get_tickets(db, user):
 @route("/classes")
 @with_db
 def get_classes(db):
-	return {"classes": query(db, "select * from classes")}
+	return {"classes": query(db, "select * from classes", symbolize_names=False)}
 
 @error(403)
 def error403(err):
