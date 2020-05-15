@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
-import os, sqlite3, collections
+import os, sqlite3, collections, string
 
 root = os.path.dirname(os.path.realpath(__file__))
 
+def _make_valid_ident(i):
+	if i[0] not in (string.ascii_letters + "_"):
+		i = "sql_" + i[0]
+	return "".join([c if c in (string.ascii_letters + string.digits + "_") else "_" for c in i])
+
 def _try_symbolize_names_for_sql(l):
+	l = {_make_valid_ident(k): v for k, v in l.items()}
 	cls = collections.namedtuple("t", l.keys())
 	old_getitem = cls.__getitem__
 	cls.__getitem__ = lambda self, k: l[k] if isinstance(k, str) else old_getitem(self, k)
@@ -63,7 +69,7 @@ def init_db():
 		select (case when (select 1 from classes where block = NEW.block and name = NEW.class_name and subsection = NEW.subsection) is null
 			then raise(fail, "Attempt to add a row to student_schedules that does not reference a row in classes")
 			else 1 end);
-		select (case when (select cap from classes where block = NEW.block and name = NEW.class_name) = (select count(*) from student_schedules where block = NEW.block and class_name = NEW.class_name)
+		select (case when (select cap from classes where block = NEW.block and name = NEW.class_name limit 1) = (select count(*) from student_schedules where block = NEW.block and class_name = NEW.class_name)
 			then raise(fail, "Adding a new row would exceed the cap for the class")
 			else 1 end);
 	end;

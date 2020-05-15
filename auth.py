@@ -6,7 +6,7 @@ sys.path.remove(".")
 
 def try_login(student_id, password):
 	db = get_db()
-	if len(query(db, "select 1 as c from students where student_id = ?", str(student_id))) == 0:
+	if len(query(db, "select 1 from students where student_id = ?", str(student_id))) == 0:
 		db.close()
 		return False, "No user exists with the student ID " + student_id
 	if password != "pass":
