@@ -9,7 +9,6 @@ class App extends React.Component {
 			loginErr: false,
 			name: false,
 		};
-		this.tryLogin = this.tryLogin.bind(this)
 	}
 	checkTickets() {
 		this.setState(s => {return {...s, loading: true}; })
@@ -59,7 +58,7 @@ class App extends React.Component {
 							? this.state.tickets !== false && this.state.classes !== false
 								? <Tabs tickets={this.state.tickets} classes={this.state.classes} onChange={this.checkTickets.bind(this)} />
 								: "Loading your tickets..."
-							: <Login onSubmit={this.tryLogin} err={this.state.loginErr} />}
+							: <Login onSubmit={this.tryLogin.bind(this)} err={this.state.loginErr} />}
 				</section>
 			</main>
 		)

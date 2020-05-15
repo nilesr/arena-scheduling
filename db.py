@@ -55,7 +55,7 @@ def init_db():
 		select raise(fail, "Classes with the same name, block and teacher must have the same cap") from classes where block = NEW.block and name = NEW.name and teacher = NEW.teacher and cap != NEW.cap;
 	end;
 	""")
-	c.execute("create index if not exists classes_name_block on classes (name, block);")
+	c.execute("create index if not exists classes_block_name_subsection_teacher on classes (block, name, subsection, teacher);")
 	c.execute("""
 	create table if not exists students (
 		student_id int unique, -- PK
@@ -72,7 +72,8 @@ def init_db():
 		class_name text, -- composite FK to classes
 		subsection text, -- composite FK to classes
 		teacher text, -- composite FK to classes
-		foreign key(student_id) references students(student_id)
+		foreign key(student_id) references students(student_id),
+		unique(student_id, block) -- each student can be in at most one class at a given block
 	);
 	""")
 	c.execute("""
@@ -85,7 +86,7 @@ def init_db():
 		select (case when (select cap from classes where block = NEW.block and name = NEW.class_name and teacher = NEW.teacher limit 1) <= (select count(*) from student_schedules where block = NEW.block and class_name = NEW.class_name and teacher = NEW.teacher)
 			then raise(fail, "Adding a new row would exceed the cap for the class")
 			else 1 end);
-		select (case when (select 1 from student_schedules where student_id = NEW.student_id and block = NEW.block and class_name = NEW.class_name) is not null
+		select (case when (select 1 from student_schedules where student_id = NEW.student_id and class_name = NEW.class_name and teacher = NEW.teacher) is not null
 			then raise(fail, "Attempt to add a new ticket for a class you already have a ticket for")
 			else 1 end);
 	end;
@@ -100,7 +101,7 @@ def init_db():
 	end;
 	""")
 	c.execute("create index if not exists student_schedules_student_id on student_schedules (student_id);")
-	c.execute("create index if not exists student_schedules_class_name_block on student_schedules (class_name, block);")
+	c.execute("create index if not exists student_schedules_block_classname_teacher on student_schedules (block, class_name, teacher);")
 	c.execute("""
 	create table if not exists sessions (
 		session_id text unique not null, -- PK
@@ -109,6 +110,12 @@ def init_db():
 	);
 	""")
 	c.execute("create index if not exists sessions_session_id on sessions (session_id);")
+	c.execute("""
+	create view if not exists classes_avail as
+	select name, block, subsection, teacher, cap, course_code, room, category,
+	  cap-(select count(*) from student_schedules ss where ss.block = block and ss.class_name = name and ss.teacher = teacher) as remaining_slots
+	from classes; 
+	""")
 	if len(c.execute("select 1 from students where student_id = ?", [941590]).fetchall()) == 0:
 		c.execute("insert into students (student_id, student_username, time_allowed_in) values (?, ?, ?)", [941590, "Niles Rogoff", 0])
 	db.commit()

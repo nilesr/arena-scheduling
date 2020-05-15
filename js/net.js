@@ -24,10 +24,10 @@ window.get = function get(path, suc, rej) {
 	fetchish("GET", path, undefined, suc, rej);
 }
 window.post = function post(path, obj, suc, rej) {
-	fetchish("POST", path, makefd(obj), succ, rej);
+	fetchish("POST", path, makefd(obj), suc, rej);
 }
 window.put = function put(path, obj, suc, rej) {
-	fetchish("PUT", path, makefd(obj), succ, rej);
+	fetchish("PUT", path, makefd(obj), suc, rej);
 }
 
 

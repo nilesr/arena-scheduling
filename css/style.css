@@ -30,9 +30,6 @@ body {
 .navigation-list {
     list-style: none;
 }
-.navigation-link {
-	color: red;
-}
 .navigation-item {
 	float: left;
     margin-right: 5rem
@@ -49,5 +46,55 @@ body {
 a.button.button-large.tabbutton.button-outline:hover {
     background-color: #4c566a;
 	color: white;
+}
+
+.expando {
+	cursor: pointer;
+	padding: 2px 5px;
+}
+.expando-contents {
+	padding: 2px 5px;
+}
+.expando-true {
+	border-bottom: 1px solid #d8dee9;
+}
+.expando-wrapper {
+	border-radius: 6px;
+	margin: 5px;
+}
+.expando-dark {
+	border: 1px solid #4c566a;
+}
+.expando-light {
+	border: 1px solid #d8dee9;
+}
+.expando-carat {
+	min-width: 20px;
+	margin-left: 20px;
+}
+.block {
+	margin-right: 2px;
+	margin-left: 2px;
+	/*
+	padding: 2px;
+	--border-color: black;
+	border: 1px solid var(--border-color);
+	border-radius: 4px;*/
+}
+.red {
+	color: red;
+	--border-color: red;
+}
+.teacher {
+	position: absolute;
+	right: 140px;
+	color: #9F9F9F;
+}
+.center {
+	text-align: center;
+}
+.green {
+	color: green;
+	--border-color: green;
 }
 

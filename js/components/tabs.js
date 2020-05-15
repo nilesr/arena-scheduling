@@ -6,7 +6,7 @@ var getBtnClass = function getBtnClass(i, tabi) {
 var Tabs = (props) => {
 	var [tabi, setTab] = React.useState(0);
 	var tabs = [
-		["Find Classes", <Classes tickets={props.tickets} classes={props.classes} />],
+		["Find Classes", <Classes tickets={props.tickets} classes={props.classes} onChange={props.onChange} />],
 		["Registered Classes", <Schedule tickets={props.tickets} />],
 	]
 	return <div>

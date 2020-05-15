@@ -30,7 +30,7 @@ def time_checked(fn):
 	@authenticated
 	def newfn(db, user, *args, **kwargs):
 		time_allowed = query(db, "select time_allowed_in from students where student_id = ?", user)[0].time_allowed_in
-		if time_allowed < time.time():
+		if time.time() < time_allowed:
 			abort(403, {"error": "Too early", "time_allowed_in": time_allowed})
 		return fn(db, user, *args, **kwargs)
 	return newfn
@@ -69,28 +69,53 @@ def get_tickets(db, user):
 @put("/tickets")
 @time_checked
 def put_ticket(db, user):
+	# Check valid block
 	block = request.forms.get("block")
 	if len(block) != 1 or block not in "ABCDEFGHP":
 		abort(400, "Invalid Block")
+
+	# Check that they're not already taking a class at that block
+	existing_block = query(db, "select class_name from student_schedules where student_id = ? and block = ?", user, block)
+	if len(existing_block) > 0:
+		abort(400, "You are already taking a class at that block: " + existing_block[0].class_name)
+
 	name = request.forms.get("name")
 	subsection = request.forms.get("subsection")
 	teacher = request.forms.get("teacher")
+
+	# Check that the class exists
 	r = query(db, "select * from classes where block = ? and name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher)
 	if len(r) == 0:
 		abort(400, "That class doesn't exist")
 	if len(r) > 1:
 		abort(500, "Database invariant violated")
-	row = commit(db, "insert into student_schedules (student_id, block, name, subsection, teacher) values (?, ?, ?, ?, ?)", user, block, name, subsection, teacher)
+
+	# Check that the user isn't already taking that class at a different block
+	r = query(db, "select block from student_schedules where class_name = ? and teacher = ?", name, teacher)
+	if len(r) > 0:
+		abort(400, "You are already in that class at another block: " + r[0].block)
+
+	# Check if the user isn't in the maximum number of classes
+	# TODO
+
+	# Check if adding the block would exceed the limit for the class
+	# TODO
+
+	row = commit(db, "insert into student_schedules (student_id, block, class_name, subsection, teacher) values (?, ?, ?, ?, ?)", user, block, name, subsection, teacher)
 	return {"ticket": row}
 
 
 @route("/classes")
 @with_db
 def get_classes(db):
-	return {"classes": query(db, "select * from classes", symbolize_names=False)}
+	return {"classes": query(db, "select * from classes_avail", symbolize_names=False)}
 
 @error(403)
 def error403(err):
+	return err.body
+
+@error(400)
+def error400(err):
 	return err.body
 
 init_db()
