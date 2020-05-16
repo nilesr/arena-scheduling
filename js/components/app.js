@@ -56,7 +56,7 @@ class App extends React.Component {
 					{this.state.loading || !this.state.classes ? <Loading /> : null}
 					{this.state.loggedIn
 							? this.state.tickets !== false && this.state.classes !== false
-								? <Tabs tickets={this.state.tickets} classes={this.state.classes} onChange={this.checkTickets.bind(this)} />
+								? <Tabs tickets={this.state.tickets} classes={this.state.classes} onChange={() => { this.checkTickets(); this.fetchClasses(); }} />
 								: "Loading your tickets..."
 							: <Login onSubmit={this.tryLogin.bind(this)} err={this.state.loginErr} />}
 				</section>

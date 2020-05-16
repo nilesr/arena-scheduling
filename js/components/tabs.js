@@ -7,7 +7,7 @@ var Tabs = (props) => {
 	var [tabi, setTab] = React.useState(0);
 	var tabs = [
 		["Find Classes", <Classes tickets={props.tickets} classes={props.classes} onChange={props.onChange} />],
-		["Registered Classes", <Schedule tickets={props.tickets} />],
+		["Registered Classes", <Schedule tickets={props.tickets} classes={props.classes} onChange={props.onChange} />],
 	]
 	return <div>
 		<div>

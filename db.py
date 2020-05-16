@@ -112,9 +112,9 @@ def init_db():
 	c.execute("create index if not exists sessions_session_id on sessions (session_id);")
 	c.execute("""
 	create view if not exists classes_avail as
-	select name, block, subsection, teacher, cap, course_code, room, category,
-	  cap-(select count(*) from student_schedules ss where ss.block = block and ss.class_name = name and ss.teacher = teacher) as remaining_slots
-	from classes; 
+	select c.name, c.block, c.subsection, c.teacher, c.cap, c.course_code, c.room, c.category,
+	  c.cap-(select count(*) from student_schedules ss where ss.block = c.block and ss.class_name = c.name and ss.teacher = c.teacher) as remaining_slots
+	from classes c; 
 	""")
 	if len(c.execute("select 1 from students where student_id = ?", [941590]).fetchall()) == 0:
 		c.execute("insert into students (student_id, student_username, time_allowed_in) values (?, ?, ?)", [941590, "Niles Rogoff", 0])
