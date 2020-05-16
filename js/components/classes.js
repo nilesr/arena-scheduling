@@ -24,7 +24,7 @@ class Classes extends React.Component {
 		var cats = groupBy(this.props.classes, e => e.category)
 		var catkeys = Object.keys(cats)
 		//catkeys.sort();
-		return <div>
+		return <div className="classes">
 			{catkeys.map((cat) => {
 				return <div key={cat}>
 					<h3>Category {cat}</h3>

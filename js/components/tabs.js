@@ -6,11 +6,11 @@ var getBtnClass = function getBtnClass(i, tabi) {
 var Tabs = (props) => {
 	var [tabi, setTab] = React.useState(0);
 	var tabs = [
-		["Find Classes", <Classes tickets={props.tickets} classes={props.classes} onChange={props.onChange} />],
+		["Find Classes", <div><Classes tickets={props.tickets} classes={props.classes} onChange={props.onChange} /><SmallSchedule tickets={props.tickets} /></div>],
 		["Registered Classes", <Schedule tickets={props.tickets} classes={props.classes} onChange={props.onChange} />],
 	]
 	return <div>
-		<div>
+		<div style={{position: "relative"}}>
 			{tabs.map((tab, i) => {
 				return <a key={i} className={getBtnClass(i, tabi)} onClick={() => setTab(i)}>{tabs[i][0]}</a>
 			})}
