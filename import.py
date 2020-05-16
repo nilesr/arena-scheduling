@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import csv, sqlite3, sys
+import csv, sqlite3, sys, random
 sys.path.insert(0, ".")
 from db import get_db, init_db, query
 init_db()
@@ -24,13 +24,15 @@ for row in csv.reader(open("/home/niles/schedule.csv")):
 		titles = title.split("/")
 		if len(titles) != len(row[0].split("/")):
 			titles = [title]
+		cap = random.randint(1, 10)
+		cap = 30
 		for i, subsection in enumerate(titles):
 			if subsection == title:
 				subsection = ""
 				cc = row[0]
 			else:
 				cc = row[0].split("/")[i]
-			n = [cc, block, unesc(title), unesc(subsection), teacher, room, category, 30]
+			n = [cc, block, unesc(title), unesc(subsection), teacher, room, category, cap]
 			print(n)
 			c.execute("insert into classes (course_code, block, name, subsection, teacher, room, category, cap) values (?, ?, ?, ?, ?, ?, ?, ?)", n)
 

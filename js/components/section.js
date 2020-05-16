@@ -28,13 +28,13 @@ var Section = (props) => {
 				}
 				var c = classes[0];
 				var used = props.used_blocks.indexOf(block) >= 0
-				var filled = c.remaining_slots <= 0 ? red : "";
+				var filled = c.remaining_slots <= 0;
 				var allowed = !used && !filled
 				return <tr key={block}>
 					<td>{c.name}</td>
 					{c.subsection == "" ? null : <td>{c.subsection}</td>}
 					<td>{c.block}</td>
-					<td className={filled ? "red" : ""}>{c.remaining_slots}</td>
+					<td className={filled ? "red" : (c.remaining_slots <= 5 ? "gold" : "")} style={{fontWeight: "bold"}}>{c.remaining_slots}</td>
 					<td className="center"><a className="button button-outline" disabled={allowed ? null : "disabled"} onClick={() => schedule(c, props.onChange)}>Add To Schedule ({c.block} Block)</a></td>
 				</tr>;
 			})}

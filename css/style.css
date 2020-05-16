@@ -75,6 +75,7 @@ a.button.button-large.tabbutton.button-outline:hover {
 .block {
 	margin-right: 2px;
 	margin-left: 2px;
+	font-weight: bold;
 	/*
 	padding: 2px;
 	--border-color: black;
@@ -98,6 +99,6 @@ a.button.button-large.tabbutton.button-outline:hover {
 	--border-color: green;
 }
 .gold {
-	color: gold;
+	color: #ff8e68;
 	--border-color: gold;
 }
