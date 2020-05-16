@@ -51,6 +51,7 @@ a.button.button-large.tabbutton.button-outline:hover {
 .expando {
 	cursor: pointer;
 	padding: 2px 5px;
+	position: relative;
 }
 .expando-contents {
 	padding: 2px 5px;
@@ -88,7 +89,7 @@ a.button.button-large.tabbutton.button-outline:hover {
 }
 .teacher {
 	position: absolute;
-	right: 140px;
+	right: 120px;
 	color: #9F9F9F;
 }
 .center {
@@ -102,3 +103,46 @@ a.button.button-large.tabbutton.button-outline:hover {
 	color: #ff8e68;
 	--border-color: gold;
 }
+.light {
+	color: #9F9F9F;
+}
+
+
+.classes {
+	display: inline-block;
+	width: 80%;
+}
+.smallschedule {
+	display: inline-block;
+	width: 20%;
+	position: fixed;
+	top: 200px;
+	left: 80%;
+}
+
+.ss-block {
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    color: var(--border-color);
+    padding: 5px 20px;
+    margin-bottom: 3px;
+    position: relative;
+}
+.ss-block-filled {
+    --border-color: #4c566a;
+}
+.ss-block-empty {
+    --border-color: #9f9f9f;
+}
+.ss-class-name {
+    position: absolute;
+    left: 45px;
+    font-size: 75%;
+}
+.ss-sub {
+    position: absolute;
+    left: 45px;
+    bottom: 0;
+    font-size: 55%;
+}
+
