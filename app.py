@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os, sys,time
-from bottle import request, response, route, static_file, post, run, abort, error, put
+from bottle import request, response, route, static_file, post, run, abort, error, put, delete
 sys.path.insert(0, ".")
 import auth
 from db import get_db, init_db, query, commit
@@ -96,14 +96,27 @@ def put_ticket(db, user):
 		abort(400, "You are already in that class at another block: " + r[0].block)
 
 	# Check if the user isn't in the maximum number of classes
-	# TODO
+	r = query(db, "select count(*) as count from student_schedules where student_id = ?", user)[0].count
+	if r >= 11:
+		abort(400, "You are already in the maximum number of classes")
 
 	# Check if adding the block would exceed the limit for the class
-	# TODO
+	r = query(db, "select remaining_slots from classes_avail where name = ? and teacher = ? and block = ?", name, teacher, block)[0].remaining_slots
+	if r <= 0:
+		abort(400, "That class is full - it has {} remaining slots".format(r))
 
 	row = commit(db, "insert into student_schedules (student_id, block, class_name, subsection, teacher) values (?, ?, ?, ?, ?)", user, block, name, subsection, teacher)
 	return {"ticket": row}
 
+@delete("/tickets/<id>")
+@time_checked
+def delete_ticket(db, user, id):
+	# Check that the ticket exists and is owned by the currently logged in user
+	r = query(db, "select 1 from student_schedules where student_id = ? and id = ?", user, id)
+	if len(r) == 0:
+		abort(400, "Bad ticket ID specified - either the ticket does not exist, or you don't own it")
+	commit(db, "delete from student_schedules where student_id = ? and id = ?", user, id)
+	return {}
 
 @route("/classes")
 @with_db

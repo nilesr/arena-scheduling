@@ -7,11 +7,16 @@ var ClassRow = (props) => {
 	var bspan = <span style={{float: "right"}}>
 		{Object.keys(blocks).map(block => {
 			var used = props.used_blocks.indexOf(block) >= 0;
-			var full = blocks[block][0].remaining_slots <= 0;
+			var remaining_slots = blocks[block][0].remaining_slots;
+			var full = remaining_slots <= 0;
 			return <span key={block} className={"block " +
 				(in_class
 					? (block == matching_tickets[0].block ? "green" : "")
-					: ((used || full) ? "red" : "")
+					: ((used || full)
+						? "red"
+						: (remaining_slots <= 5
+							? "gold"
+							: ""))
 				)
 			}>{block == "P" ? "PM" : block}</span>
 		})}

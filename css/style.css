@@ -97,4 +97,7 @@ a.button.button-large.tabbutton.button-outline:hover {
 	color: green;
 	--border-color: green;
 }
-
+.gold {
+	color: gold;
+	--border-color: gold;
+}

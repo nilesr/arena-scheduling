@@ -1,3 +1,8 @@
+var killTicket = function killTicket(id, oc) {
+	if (!confirm("Are you ABSOLUTELY sure you would like to remove this class from your schedule? Your spot will be released and may be taken by someone else.")) return;
+	netDelete("/tickets/" + id, oc, (e) => { window.alert("There was an error deleting your ticket: " + e); })
+}
+
 class Schedule extends React.Component {
 	render() {
 		if (this.props.tickets.length == 0) return "Not registered for any classes";
@@ -5,11 +10,14 @@ class Schedule extends React.Component {
 		tickets.sort(((a, b) => a.block.localeCompare(b.block)))
 		return <table>
 			<thead>
-				<th>Block</th>
-				<th>Course Code</th>
-				<th>Name</th>
-				<th>Teacher</th>
-				<th>Room</th>
+				<tr>
+					<th>Block</th>
+					<th>Course Code</th>
+					<th>Name</th>
+					<th>Teacher</th>
+					<th>Room</th>
+					<th></th>
+				</tr>
 			</thead>
 			<tbody>
 				{this.props.tickets.map((t, i) => {
@@ -20,6 +28,11 @@ class Schedule extends React.Component {
 							<td>{t.class_name + (t.subsection != "" ? " (" + t.subsection + ")" : "")}</td>
 							<td>{t.teacher}</td>
 							<td>{c.room}</td>
+							<td>
+								<a className="button" onClick={() => killTicket(t.id, this.props.onChange)}>
+									<i className="fa fa-trash" aria-hidden="true" />
+								</a>
+							</td>
 						</tr>
 				})}
 			</tbody>

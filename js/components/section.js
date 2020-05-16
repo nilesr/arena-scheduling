@@ -5,7 +5,7 @@ var schedule = function schedule(c, oc) {
 		subsection: c.subsection,
 		teacher: c.teacher
 	}
-	put("/tickets", obj, oc, window.alert)
+	put("/tickets", obj, oc, e => { window.alert(e); oc(); })
 }
 
 var Section = (props) => {

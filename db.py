@@ -66,7 +66,7 @@ def init_db():
 	c.execute("create index if not exists students_student_id on students (student_id);")
 	c.execute("""
 	create table if not exists student_schedules (
-		stamp_id int primary key, -- for bryan
+		id INTEGER PRIMARY KEY, -- for bryan
 		student_id int, -- FK to students
 		block char, -- composite FK to classes
 		class_name text, -- composite FK to classes
