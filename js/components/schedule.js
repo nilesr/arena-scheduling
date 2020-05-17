@@ -20,7 +20,7 @@ class Schedule extends React.Component {
 					return <tr key={i}>
 							<td>{t.block}</td>
 							<td>{c.course_code}</td>
-							<td><ClassName ticket={t} /></td>
+							<td><ClassName ticket={t} display_subsection={true} /></td>
 							<td>{t.teacher}</td>
 							<td>{c.room}</td>
 							<td>

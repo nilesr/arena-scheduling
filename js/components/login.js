@@ -4,7 +4,7 @@ var Login = (props) => {
 		event.preventDefault();
 	}
 	return (
-		<div>
+		<section className="container">
 			{props.err ?
 				<blockquote>{props.err}</blockquote>
 			: null}
@@ -17,7 +17,7 @@ var Login = (props) => {
 					<input className="button-primary" type="submit" value="Login" />
 				</fieldset>
 			</form>
-		</div>
+		</section>
 	);
 }
 window.Login = Login
