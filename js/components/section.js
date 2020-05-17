@@ -35,7 +35,7 @@ var Section = (props) => {
 					{c.subsection == "" ? null : <td>{c.subsection}</td>}
 					<td>{c.block}</td>
 					<td className={filled ? "red" : (c.remaining_slots <= 5 ? "gold" : "")} style={{fontWeight: "bold"}}>{c.remaining_slots}</td>
-					<td className="center"><a className="button button-outline" disabled={allowed ? null : "disabled"} onClick={() => schedule(c, props.onChange)}>Add To Schedule ({c.block} Block)</a></td>
+					<td className="center"><a className="button button-outline" disabled={allowed ? null : "disabled"} onClick={() => schedule(c, props.onChange)}>Add To Schedule ({c.block == "P" ? "PM" : c.block} Block)</a></td>
 				</tr>;
 			})}
 		</tbody>
