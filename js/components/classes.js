@@ -27,7 +27,13 @@ class Classes extends React.Component {
 		return <div className="classes">
 			{catkeys.map((cat) => {
 				return <div key={cat}>
-					<h3 id={"cat-" + cat}>{catnames[cat]}</h3>
+					<h3 id={"cat-" + cat}>
+					{
+						this.props.cat == cat
+						? <mark>{catnames[cat]}</mark>
+						: catnames[cat]
+					}
+					</h3>
 					{renderCat(cats[cat], this.props.onChange, used_blocks, this.props.tickets)}
 				</div>;
 			})}

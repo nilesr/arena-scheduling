@@ -23,7 +23,7 @@ body {
 }
 
 #mainContainer {
-	min-height: 450px;
+	min-height: 450px; /* this was so that #loading would look alright with no content, no longer needed? */
 	padding-top: 20px;
 }
 
@@ -116,14 +116,20 @@ a.button.button-large.tabbutton.button-outline:hover {
 
 .classes {
 	display: inline-block;
-	width: 80%;
+	position: absolute;
+	left: 0;
+	top: 121px;
+	width: 66%;
+	padding-left: 10%;
 }
 .smallschedule {
 	display: inline-block;
-	width: 20%;
+	width: 33%;
 	position: fixed;
-	top: 200px;
-	left: 80%;
+	top: 121px;
+	left: 66%;
+	padding-right: 5%;
+	padding-left: 3%;
 }
 
 .ss-block {
@@ -159,4 +165,14 @@ a.button.button-large.tabbutton.button-outline:hover {
     height: 2.5rem;
     line-height: 2.5rem;
     padding: 0 1.2rem;
+}
+
+mark {
+    border-radius: 3px;
+    padding: 3px;
+    background-color: gold;
+}
+
+.tabs-container {
+    margin-top: 1.5rem;
 }
