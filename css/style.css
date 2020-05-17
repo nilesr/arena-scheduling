@@ -9,7 +9,7 @@ body {
 }
 
 #loading {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -31,12 +31,18 @@ body {
     list-style: none;
 }
 .navigation-item {
-	float: left;
+    float: left;
     margin-right: 5rem
+}
+
+.tabbutton {
+    border-radius: 0;
+    border-left: none;
 }
 
 .tabbutton:first-child {
     border-radius: 7px 0 0 7px;
+    border-left: solid 1px #4c566a;
 }
 
 .tabbutton:last-child {
