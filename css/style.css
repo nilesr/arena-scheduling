@@ -186,3 +186,41 @@ mark {
 .tabs-container {
     margin-top: 1.5rem;
 }
+
+.schedule {
+    display: grid;
+    grid-template-columns: 8.8% 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 0.5fr 3.55% 1fr 1fr 1fr 1fr 1fr 1fr 3.55% 1fr;
+    height: 900px;
+    width: 740px;
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+    background-color: black;
+    border: 1px solid black;
+}
+.schedule > div {
+    padding: 10px 10px 0 10px;
+    font-weight: bold;
+    text-align: center;
+    background-color: white;
+    position: relative;
+}
+.sport {
+    grid-column-start: 1;
+    grid-column-end: 7;
+}
+.schedule-classname {
+    font-weight: 300;
+}
+.schedule-killbtn {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    padding: 0;
+    height: 22px;
+    width: 22px;
+    line-height: 24px;
+    border-radius: 11px;
+    background-color: rgba(255, 0, 0, 0.5);
+    border: none;
+}
