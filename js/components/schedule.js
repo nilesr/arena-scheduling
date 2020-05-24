@@ -35,5 +35,3 @@ class Schedule extends React.Component {
 	}
 }
 window.Schedule = Schedule;
-
-

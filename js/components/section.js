@@ -44,4 +44,3 @@ var SectionList = (props) => {
 	</table>
 }
 window.SectionList = SectionList;
-

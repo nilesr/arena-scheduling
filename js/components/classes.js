@@ -20,7 +20,7 @@ var renderCat = function renderCat(classes, oc, used_blocks, tickets) {
 
 var replaceAll = function replaceAll(s, b, a) {
 	while (s.indexOf(b) >= 0) {
-		s = s.replace(b, a)
+		s = s.replace(b, a);
 	}
 	return s;
 }
@@ -86,4 +86,3 @@ class Classes extends React.Component {
 	}
 }
 window.Classes = Classes;
-
