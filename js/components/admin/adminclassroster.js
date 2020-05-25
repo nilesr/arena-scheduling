@@ -2,11 +2,22 @@ class AdminClassRosterTable extends React.Component {
     
     constructor(props) {
         super(props);
+
+        this.removeStudent = this.removeStudent.bind(this)
+    }
+
+    removeStudent(student) {
+        
+        let c = this.props.class
+        let className = "{0} ({1} block) - {2}".format((c.subsection ? c.subsection : c.name), (c.block == "P" ? "PM" : c.block), c.teacher)
+
+        if (!confirm("Are you ABSOLUTELY sure you would like to remove " + student.student_username + " (" + student.student_id +  ") from " + className + "?")) return;
+	    netDelete("/teacher/remove/" + student.id, () => {console.log('removed')}, (e) => { window.alert("There was an error deleting your ticket: " + e); })
+
     }
 
     render() {
         
-        console.log(this.props)
         let c = this.props.class
         let className = "{0} ({1} block) - {2}".format((c.subsection ? c.subsection : c.name), (c.block == "P" ? "PM" : c.block), c.teacher)
 
@@ -14,10 +25,10 @@ class AdminClassRosterTable extends React.Component {
         if (this.props.roster.length != 0)
         {
             body = this.props.roster.map((student) => 
-                <tr key={student.student_id}>
+                <tr key={student.id}>
                     <td>{student.student_username}</td>
                     <td>{student.student_id}</td>
-                    <td>remove</td>
+                    <td><a className="button button-outline"  key={"button-" + (c.name + c.subsection + c.teacher + c.block)} onClick={() => this.removeStudent(student) }>Remove</a></td>
                 </tr>)
         }
         
@@ -55,6 +66,10 @@ class AdminClassRoster extends React.Component {
         };
     }
     
+    reload() {
+
+    }
+
     queryClass() {
 
         this.setState({
@@ -124,7 +139,7 @@ class AdminClassRoster extends React.Component {
 
         console.log(this.props)
         return (
-        <div className="class-roster" style={{position: "absolute"}}>
+        <div className="class-roster">
             <Expando type="dark" preview={preview} open={true}>
                 {this.state.curClass 
                     ? this.state.loading

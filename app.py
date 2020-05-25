@@ -154,6 +154,17 @@ def get_class_roster(db, user):
 
 	return {"roster": query(db, "select * from student_schedules join students ON student_schedules.student_id = students.student_id and block = ? and class_name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher)}
 
+@delete("/teacher/remove/<id>")
+@require_admin
+def teacher_delete_ticket(db, user, id):
+	# Check that the ticket exists and is owned by the currently logged in user
+	r = query(db, "select 1 from student_schedules where id = ?", id)
+	if len(r) == 0:
+		abort(400, "Bad ticket ID specified - either the ticket does not exist")
+	commit(db, "delete from student_schedules where id = ?", id)
+	return {}
+
+
 @route("/<filename:path>")
 def static(filename):
 	return static_file(filename, root=root)
