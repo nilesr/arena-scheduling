@@ -6,10 +6,11 @@ var getBtnClass = function getBtnClass(i, tabi) {
 var wrapSection = (s) => <section className="container" id="mainSection">{s}</section>
 var AdminTabs = (props) => {
 	var [tabi, setTab] = React.useState(0);
-	var [cati, setCat] = React.useState(null);
+    var [cati, setCat] = React.useState(null);
+    var [curClass, setCurClass] = React.useState(null);
 	var tabs = [
-		["Class Rosters", <div>Rosters</div>],
-		["Students", <div>Students</div>],
+		["Class Rosters", [<AdminClasses key="admin-classes" classes={props.classes} setCurClass={setCurClass}  />, <AdminClassRoster key="admin-tabs" curClass={curClass} />]],
+		["Students", <AdminStudentView />],
 	]
 	return <div>
 		<section className="container tabs-container">

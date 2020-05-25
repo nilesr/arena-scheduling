@@ -47,10 +47,6 @@ def require_admin(fn):
 def index():
 	return static_file("/index.html", root=root)
 
-@route("/<filename:path>")
-def static(filename):
-	return static_file(filename, root=root)
-
 @route("/login")
 def login():
 	redirect(oauth.make_url())
@@ -142,6 +138,15 @@ def delete_ticket(db, user, id):
 @with_db
 def get_classes(db):
 	return {"classes": query(db, "select * from classes_avail", symbolize_names=False)}
+
+@route("/roster")
+@require_admin
+def get_class_roster(db, user, id):
+	return {"roster": query(db, "select * from classes_avail", symbolize_names=False)}
+
+@route("/<filename:path>")
+def static(filename):
+	return static_file(filename, root=root)
 
 @error(403)
 def error403(err):
