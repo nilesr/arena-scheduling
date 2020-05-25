@@ -224,6 +224,10 @@ mark {
     background-color: rgba(255, 0, 0, 0.5);
     border: none;
 }
+.schedule-classroom {
+    font-weight: 300;
+    font-size: 80%;
+}
 
 .login-button {
     padding: 0 15px;
@@ -231,4 +235,38 @@ mark {
 
 .login-icon {
     margin-right: 10px;
+}
+
+.schedule-cb > div > label {
+    display: inline-block;
+}
+
+.print-icon {
+    margin-right: 10px;
+}
+
+@media print {
+    nav, .schedule-cb, .tabs-container, .schedule-killbtn, .printhide {
+	display: none;
+    }
+    .container {
+        padding: 0;
+        max-width: unset;
+    }
+    .schedule {
+	width: 7.5in;
+	height: 9.12in;
+	grid-column-gap: 0.0138in;
+	grid-row-gap: 0.0138in;
+	margin-bottom: 1in; /* shoves the table onto the next page */
+    }
+}
+@page {
+    margin-left: 0.5in;
+    margin-top: 0.5in;
+    margin-right: 0.5in;
+}
+
+.print-button {
+    margin-right: 20px;
 }
