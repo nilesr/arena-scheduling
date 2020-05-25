@@ -6,7 +6,6 @@ class App extends React.Component {
 			tickets: false,
 			classes: false,
 			loading: true,
-			loginErr: false,
 			name: false,
 		};
 	}
@@ -15,17 +14,6 @@ class App extends React.Component {
 		get("/tickets",
 			(t) => this.setState(s => { return {...s, loading: false, loggedIn: true, tickets: t.tickets, name: t.name}; }),
 			(e) => this.setState(s => { return {...s, loading: false, loggedIn: false} }),
-		)
-	}
-	tryLogin(user, pass) {
-		this.setState(s => {return {...s, loading: true}; })
-		post("/login",
-			{user: user, pass: pass},
-			(t) => {
-				this.setState(s => { return {...s, loading: true, loggedIn: true, loginErr: false}; });
-				this.checkTickets();
-			},
-			(e) => this.setState(s => { return {...s, loading: false, loggedIn: false, loginErr: e} }),
 		)
 	}
 	fetchClasses() {
@@ -57,7 +45,7 @@ class App extends React.Component {
 						? this.state.tickets !== false && this.state.classes !== false
 							? <Tabs tickets={this.state.tickets} classes={this.state.classes} onChange={() => { this.checkTickets(); this.fetchClasses(); }} />
 							: "Loading your tickets..."
-						: <Login onSubmit={this.tryLogin.bind(this)} err={this.state.loginErr} />}
+						: <Login />}
 			</main>
 		)
 	}
