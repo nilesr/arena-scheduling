@@ -143,6 +143,24 @@ a.button.button-large.tabbutton.button-outline:hover {
     max-height:80vh;
 }
 
+.admin-student-list {
+    display: inline-block;
+    vertical-align: top;
+	position: fixed;
+	width: 35%;
+	left: 60%;
+	padding-right: 5%;
+    padding-left: 3%;
+    max-height:80vh;
+}
+
+.admin-student-view {
+    display: inline-block;
+    vertical-align: top;
+    width: 45%;
+	margin-left: 15%;
+}
+
 .linebreak {
     display: block;
     height: 1px;

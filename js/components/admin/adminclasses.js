@@ -64,7 +64,7 @@ class AdminClasses extends React.Component {
 			<input className="search" style={{marginTop: '1%', marginBottom: '2%'}} placeholder="Search for classes" value={this.state.i} onChange={(evt) => this.setState({i: evt.target.value})} />
 			</div>
             <div className="linebreak"></div>
-            <div style={{overflowY: 'scroll'}}>
+            <div style={{overflowY: 'auto'}}>
             {this.state.i == ""
 				? catkeys.map((cat) => {
 						return <div key={cat}>

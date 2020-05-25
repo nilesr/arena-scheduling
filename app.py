@@ -152,7 +152,7 @@ def get_class_roster(db, user):
 	if not block or not name or not teacher:
 		abort(400, "Invalid Query")
 
-	return {"roster": query(db, "select * from student_schedules join students ON student_schedules.student_id = students.student_id and block = ? and class_name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher)}
+	return {"roster": query(db, "select * from student_schedules join students ON student_schedules.student_id = students.student_id and block = ? and class_name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher, symbolize_names=False)}
 
 @delete("/teacher/remove/<id>")
 @require_admin
@@ -164,6 +164,10 @@ def teacher_delete_ticket(db, user, id):
 	commit(db, "delete from student_schedules where id = ?", id)
 	return {}
 
+@route("/teacher/allstudents")
+@require_admin
+def get_all_students(db, user):
+	return {"students": query(db, "select * from students order by student_username", symbolize_names=False)}
 
 @route("/<filename:path>")
 def static(filename):

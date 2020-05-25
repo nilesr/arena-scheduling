@@ -13,12 +13,14 @@ class AdminTabs extends React.Component
         this.state = {
             cat: null,
             tab: 0,
-            curClass: null
+            curClass: null,
+            curStudent: null
         }
 
         this.setTab = this.setTab.bind(this)
         this.setCat = this.setCat.bind(this)
         this.setCurClass = this.setCurClass.bind(this)
+        this.setCurStudent = this.setCurStudent.bind(this)
 
     }
 
@@ -34,13 +36,18 @@ class AdminTabs extends React.Component
         this.setState({...this.state, curClass: c})
     }
 
+    setCurStudent(student) {
+        this.setState({...this.state, curStudent: student})
+    }
+
     render() {
         let tabs  = [
             ["Class Rosters",
                 [<AdminClassRoster key="admin-class-roster" curClass={this.state.curClass} />,
-                 <AdminClasses key="admin-classes" classes={this.props.classes} setCurClass={this.setCurClass}  />]
-            ],
-            ["Students", <AdminStudentView />],
+                 <AdminClasses key="admin-classes" classes={this.props.classes} setCurClass={this.setCurClass}  />]],
+            ["Students", 
+                [<AdminStudentView key="admin-student-view" curStudent={this.state.curStudent} />,
+                 <AdminStudentSearch key="admin-student-search" setCurStudent={this.setCurStudent} />]],
             ["Export", "Export"]
         ]
         return <div>

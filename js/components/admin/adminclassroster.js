@@ -36,7 +36,7 @@ class AdminClassRosterTable extends React.Component {
         [
         <div key="class-roster-title" className="class-roster-title">{className}</div>,
         <div key="linebreak" className="linebreak"></div>,
-        <div key="table" style={{overflowY: 'scroll'}}>
+        <div key="table" style={{overflowY: 'auto'}}>
             <table style={{margin: "10px 2.5%", width: "95%"}}>
             <thead>
                 <tr>
@@ -122,7 +122,6 @@ class AdminClassRoster extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log('aaaaaaaaaaaacc')
         if (this.state.curClass != this.props.curClass) {
             this.queryClass()
         }
@@ -130,13 +129,8 @@ class AdminClassRoster extends React.Component {
 
     render() {
 
-        console.log('classroster: ' + JSON.stringify(this.state.curClass))
-        
         let c = this.state.curClass
         let preview = "Class Roster"
-        if (c && 0) {
-            preview = "Class Roster: " + c.name + c.subsection + c.teacher + (c.block == "P" ? "PM" : c.block)
-        }
 
         return (
         <div className="class-roster">
