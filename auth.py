@@ -5,7 +5,7 @@ from db import get_db, query, commit
 sys.path.remove(".")
 
 
-def try_login(email):
+def try_login(email, name):
 	db = get_db()
 	if email in ["nilesrogoff@gmail.com", "mcdasethan2@gmail.com"]:
 		email = "niles.rogoff@apsva.us"
@@ -15,9 +15,12 @@ def try_login(email):
 		student_id = email.replace("@apsva.us", "")
 	else:
 		return False, "user not registered"
-	if len(query(db, "select 1 from students where student_id = ?", str(student_id))) == 0:
+	username_query = query(db, "select student_username from students where student_id = ?", student_id)
+	if len(username_query) == 0:
 		db.close()
 		return False, "No user exists with the student ID " + student_id
+	if not username_query[0].student_username:
+		commit(db, "update students set student_username = ? where student_id = ?", name, student_id)
 	r = query(db, "select session_id from sessions where student_id = ?", student_id)
 	if len(r) > 0:
 		return True, r[0].session_id.decode("utf-8")

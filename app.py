@@ -53,8 +53,8 @@ def login():
 
 @route("/authn")
 def authn():
-	email = oauth.get_email(request)
-	succ, stat = auth.try_login(email)
+	email, name = oauth.get_email(request)
+	succ, stat = auth.try_login(email, name)
 	if not succ:
 		abort(400, stat)
 	response.set_cookie("auth", stat)
