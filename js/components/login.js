@@ -5,18 +5,8 @@ var Login = (props) => {
 	}
 	return (
 		<section className="container">
-			{props.err ?
-				<blockquote>{props.err}</blockquote>
-			: null}
-			<form onSubmit={onsubmit} style={{paddingTop: "20px"}}>
-				<fieldset>
-					<label htmlFor="username">Student ID number</label>
-					<input placeholder="941590" name="username" id="username" />
-					<label htmlFor="password">School Password</label>
-					<input type="password" name="password" id="password" />
-					<input className="button-primary" type="submit" value="Login" />
-				</fieldset>
-			</form>
+			<blockquote>Login with your apsva.us Google account. For example, 941590@apsva.us</blockquote>
+			<button onClick={() => window.location.href = "/login"}>Login</button>
 		</section>
 	);
 }

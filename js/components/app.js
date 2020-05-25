@@ -6,7 +6,6 @@ class App extends React.Component {
 			tickets: false,
 			classes: false,
 			loading: true,
-			loginErr: false,
 			name: false,
 			isAdmin: true
 		};
@@ -16,17 +15,6 @@ class App extends React.Component {
 		get("/tickets",
 			(t) => this.setState(s => { return {...s, loading: false, loggedIn: true, tickets: t.tickets, name: t.name}; }),
 			(e) => this.setState(s => { return {...s, loading: false, loggedIn: false} }),
-		)
-	}
-	tryLogin(user, pass) {
-		this.setState(s => {return {...s, loading: true}; })
-		post("/login",
-			{user: user, pass: pass},
-			(t) => {
-				this.setState(s => { return {...s, loading: true, loggedIn: true, loginErr: false}; });
-				this.checkTickets();
-			},
-			(e) => this.setState(s => { return {...s, loading: false, loggedIn: false, loginErr: e} }),
 		)
 	}
 	fetchClasses() {

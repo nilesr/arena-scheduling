@@ -4,14 +4,17 @@ sys.path.insert(0, ".")
 from db import get_db, query, commit
 sys.path.remove(".")
 
-def try_login(student_id, password):
+def try_login(email):
 	db = get_db()
+	if email in ["nilesrogoff@gmail.com", "mcdasethan2@gmail.com"]:
+		email = "941590@apsva.us"
+	if email.endswith("@apsva.us"):
+		student_id = email.replace("@apsva.us", "")
+	else:
+		return False, "user not registered"
 	if len(query(db, "select 1 from students where student_id = ?", str(student_id))) == 0:
 		db.close()
 		return False, "No user exists with the student ID " + student_id
-	if password != "pass":
-		db.close()
-		return False, "Password is incorrect"
 	r = query(db, "select session_id from sessions where student_id = ?", student_id)
 	if len(r) > 0:
 		return True, r[0].session_id.decode("utf-8")

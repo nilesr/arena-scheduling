@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import os, sys,time
-from bottle import request, response, route, static_file, post, run, abort, error, put, delete
+from bottle import request, response, route, static_file, post, run, abort, error, put, delete, redirect
 sys.path.insert(0, ".")
-import auth
+import auth, oauth
 from db import get_db, init_db, query, commit
 sys.path.remove(".")
 
@@ -43,13 +43,18 @@ def index():
 def static(filename):
 	return static_file(filename, root=root)
 
-@post("/login")
+@route("/login")
 def login():
-	succ, stat = auth.try_login(request.forms.get("user"), request.forms.get("pass"))
+	redirect(oauth.make_url())
+
+@route("/authn")
+def authn():
+	email = oauth.get_email(request)
+	succ, stat = auth.try_login(email)
 	if not succ:
-		abort(403, stat)
+		abort(400, stat)
 	response.set_cookie("auth", stat)
-	return {"auth": stat}
+	redirect("/")
 
 @post("/logout")
 @with_db
@@ -63,8 +68,16 @@ def logout(db):
 @authenticated
 def get_tickets(db, user):
 	tickets = query(db, "select * from student_schedules where student_id = ?", user, symbolize_names=False)
-	name = query(db, "select student_username from students where student_id = ?", user)[0].student_username
-	return {"tickets": tickets, "name": name}
+	student = query(db, "select student_username, time_allowed_in from students where student_id = ?", user)[0]
+	name = student.student_username
+	#admin = student.admin
+	time_allowed_in = student.time_allowed_in
+	return {
+		"tickets": tickets,
+		"name": name,
+		"admin": False,
+		"time_left": time_allowed_in - time.time()
+	}
 
 @put("/tickets")
 @time_checked
