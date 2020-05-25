@@ -8,6 +8,7 @@ class App extends React.Component {
 			loading: true,
 			loginErr: false,
 			name: false,
+			isAdmin: true
 		};
 	}
 	checkTickets() {
@@ -54,9 +55,11 @@ class App extends React.Component {
 				</nav>
 				{this.state.loading || !this.state.classes ? <Loading /> : null}
 				{this.state.loggedIn
-						? this.state.tickets !== false && this.state.classes !== false
-							? <Tabs tickets={this.state.tickets} classes={this.state.classes} onChange={() => { this.checkTickets(); this.fetchClasses(); }} />
-							: "Loading your tickets..."
+						? (this.state.tickets == false || this.state.classes == false)
+							? "Loading..."
+							: this.state.isAdmin
+								? <AdminView classes={this.state.classes} />
+								: <Tabs tickets={this.state.tickets} classes={this.state.classes} onChange={() => { this.checkTickets(); this.fetchClasses(); }} />
 						: <Login onSubmit={this.tryLogin.bind(this)} err={this.state.loginErr} />}
 			</main>
 		)
