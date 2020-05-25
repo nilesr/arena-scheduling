@@ -141,8 +141,18 @@ def get_classes(db):
 
 @route("/roster")
 @require_admin
-def get_class_roster(db, user, id):
-	return {"roster": query(db, "select * from classes_avail", symbolize_names=False)}
+def get_class_roster(db, user):
+	q = dict(request.query)
+
+	block = q['block']
+	name = q['name']
+	subsection = q['subsection'] if q['subsection'] else ""
+	teacher = q['teacher']
+
+	if not block or not name or not teacher:
+		abort(400, "Invalid Query")
+
+	return {"roster": query(db, "select * from student_schedules join students ON student_schedules.student_id = students.student_id and block = ? and class_name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher)}
 
 @route("/<filename:path>")
 def static(filename):
@@ -154,7 +164,7 @@ def error403(err):
 
 @error(400)
 def error400(err):
-	return err.body
+	return err.body 
 
 init_db()
 run(host="127.0.0.1", port="8080", debug=True)

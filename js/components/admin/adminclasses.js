@@ -17,6 +17,34 @@ var renderCat = function renderCat(classes, oc, setCurClass) {
 	</div>;
 }
 
+var replaceAll = function replaceAll(s, b, a) {
+	while (s.indexOf(b) >= 0) {
+		s = s.replace(b, a);
+	}
+	return s;
+}
+
+var filterClasses = function filterClasses(cs, i) {
+	i = replaceAll(i, "/", " ").toLowerCase().split(" ")
+	cs = cs.filter(c => {
+		var ck = replaceAll(((c.subsection == "" ? c.name : c.subsection) + " " + c.teacher + " " + c.course_code).toLowerCase(), "/", " ")
+		for (let j = 0; j < i.length; j++) {
+			if (ck.indexOf(i[j]) < 0) return false;
+		}
+		return true;
+	})
+	cs.sort((a, b) => {
+		var an = a.subsection == "" ? a.name : a.subsection
+		var bn = b.subsection == "" ? b.name : b.subsection
+		var c1 = an.localeCompare(bn)
+		if (c1 != 0) return c1;
+		var c2 = a.teacher.localeCompare(b.teacher)
+		if (c2 != 0) return c2;
+		return a.block.localeCompare(b.block)
+	})
+	return cs
+}
+
 
 class AdminClasses extends React.Component {
 	constructor(props) {
@@ -46,7 +74,7 @@ class AdminClasses extends React.Component {
 							{renderCat(cats[cat], this.props.onChange, this.props.setCurClass)}
 						</div>;
 					})
-				: <SectionList classes={filterClasses(this.props.classes, this.state.i)}
+				: <AdminSectionList classes={filterClasses(this.props.classes, this.state.i)}
 							   onChange={this.props.onChange} setCurClass={this.props.setCurClass}
 					/>
 			}

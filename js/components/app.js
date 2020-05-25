@@ -13,13 +13,13 @@ class App extends React.Component {
 	}
 	checkTickets() {
 		this.setState(s => {return {...s, loading: true}; })
-		get("/tickets",
+		get("/tickets", {},
 			(t) => this.setState(s => { return {...s, loading: false, loggedIn: true, tickets: t.tickets, name: t.name, time_left: t.time_left, isAdmin: t.admin}; }),
 			(e) => this.setState(s => { return {...s, loading: false, loggedIn: false} }),
 		)
 	}
 	fetchClasses() {
-		get("/classes",
+		get("/classes", {},
 			(t) => this.setState(s => { return {...s, loading: false, classes: t.classes}; }),
 			window.alert
 		)

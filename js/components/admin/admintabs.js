@@ -9,7 +9,12 @@ var AdminTabs = (props) => {
     var [cati, setCat] = React.useState(null);
     var [curClass, setCurClass] = React.useState(null);
 	var tabs = [
-		["Class Rosters", [<AdminClasses key="admin-classes" classes={props.classes} setCurClass={setCurClass}  />, <AdminClassRoster key="admin-tabs" curClass={curClass} />]],
+		["Class Rosters",
+            <div>
+                <AdminClasses key="admin-classes" classes={props.classes} setCurClass={setCurClass}  />
+                <AdminClassRoster key="admin-tabs" curClass={curClass} />
+            </div>
+        ],
 		["Students", <AdminStudentView />],
 	]
 	return <div>

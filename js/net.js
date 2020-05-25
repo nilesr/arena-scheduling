@@ -20,8 +20,32 @@ var makefd = function makefd(obj) {
 	}
 	return fd;
 }
-window.get = function get(path, suc, rej) {
-	fetchish("GET", path, undefined, suc, rej);
+
+var makepath = function(path, args) {
+	if (args == undefined) {
+		return path
+	}
+	
+	str = []
+	for (let [key, value] of Object.entries(args)) {
+		if (value != null) {
+			str.push(encodeURIComponent(key) + "=" + encodeURIComponent(value))
+		} else {
+			str.push(encodeURIComponent(key))
+		}
+	}
+
+	if (str.length == 0) {
+		return path
+	}
+
+	let final_path = path + '?' + str.join('&')
+	console.log(final_path)
+	return final_path
+}
+
+window.get = function get(path, args, suc, rej) {
+	fetchish("GET", makepath(path, args), undefined, suc, rej);
 }
 window.post = function post(path, obj, suc, rej) {
 	fetchish("POST", path, makefd(obj), suc, rej);
