@@ -6,7 +6,7 @@ var Login = (props) => {
 	return (
 		<section className="container">
 			<blockquote>Login with your apsva.us Google account. For example, 941590@apsva.us</blockquote>
-			<button onClick={() => window.location.href = "/login"}>Login</button>
+			<a href="/login" className="button button-outline login-button"><i className="fa fa-google login-icon" aria-hidden="true"></i> Login</a>
 		</section>
 	);
 }

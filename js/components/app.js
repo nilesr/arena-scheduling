@@ -7,13 +7,14 @@ class App extends React.Component {
 			classes: false,
 			loading: true,
 			name: false,
-			isAdmin: true
+			isAdmin: false,
+			time_left: -1
 		};
 	}
 	checkTickets() {
 		this.setState(s => {return {...s, loading: true}; })
 		get("/tickets",
-			(t) => this.setState(s => { return {...s, loading: false, loggedIn: true, tickets: t.tickets, name: t.name}; }),
+			(t) => this.setState(s => { return {...s, loading: false, loggedIn: true, tickets: t.tickets, name: t.name, time_left: t.time_left, isAdmin: t.admin}; }),
 			(e) => this.setState(s => { return {...s, loading: false, loggedIn: false} }),
 		)
 	}
@@ -43,7 +44,7 @@ class App extends React.Component {
 				</nav>
 				{this.state.loading || !this.state.classes ? <Loading /> : null}
 				{this.state.loggedIn
-						? (this.state.tickets == false || this.state.classes == false)
+						? (this.state.tickets === false || this.state.classes === false)
 							? "Loading..."
 							: this.state.isAdmin
 								? <AdminView classes={this.state.classes} />

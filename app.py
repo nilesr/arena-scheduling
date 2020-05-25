@@ -23,7 +23,7 @@ def authenticated(fn):
 	def newfn(db, *args, **kwargs):
 		user = auth.try_auth(request, db)
 		if not user: abort(403, "Permission denied")
-		return fn(db, user, *args, **kwargs)
+		return fn(db, str(user), *args, **kwargs)
 	return newfn
 
 def time_checked(fn):
@@ -32,6 +32,14 @@ def time_checked(fn):
 		time_allowed = query(db, "select time_allowed_in from students where student_id = ?", user)[0].time_allowed_in
 		if time.time() < time_allowed:
 			abort(403, {"error": "Too early", "time_allowed_in": time_allowed})
+		return fn(db, user, *args, **kwargs)
+	return newfn
+
+def require_admin(fn):
+	@authenticated
+	def newfn(db, user, *args, **kwargs):
+		if not auth.is_admin(user):
+			abort(400, "You are not an administrator")
 		return fn(db, user, *args, **kwargs)
 	return newfn
 
@@ -70,12 +78,11 @@ def get_tickets(db, user):
 	tickets = query(db, "select * from student_schedules where student_id = ?", user, symbolize_names=False)
 	student = query(db, "select student_username, time_allowed_in from students where student_id = ?", user)[0]
 	name = student.student_username
-	#admin = student.admin
 	time_allowed_in = student.time_allowed_in
 	return {
 		"tickets": tickets,
 		"name": name,
-		"admin": False,
+		"admin": auth.is_admin(user),
 		"time_left": time_allowed_in - time.time()
 	}
 

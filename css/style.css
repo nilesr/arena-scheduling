@@ -224,3 +224,11 @@ mark {
     background-color: rgba(255, 0, 0, 0.5);
     border: none;
 }
+
+.login-button {
+    padding: 0 15px;
+}
+
+.login-icon {
+    margin-right: 10px;
+}

@@ -117,6 +117,8 @@ def init_db():
 	from classes c; 
 	""")
 	if len(c.execute("select 1 from students where student_id = ?", [941590]).fetchall()) == 0:
-		c.execute("insert into students (student_id, student_username, time_allowed_in) values (?, ?, ?)", [941590, "Niles Rogoff", 0])
+		c.execute("insert into students (student_id, student_username, time_allowed_in) values (?, ?, ?)", [941590, "Niles Rogoff (Student)", 0])
+	if len(c.execute("select 1 from students where student_id = ?", ["niles.rogoff"]).fetchall()) == 0:
+		c.execute("insert into students (student_id, student_username, time_allowed_in) values (?, ?, ?)", ["niles.rogoff", "Niles Rogoff (Administrator)", 0])
 	db.commit()
 	db.close()

@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
-import os, base64, sys
+import os, base64, sys, re
 sys.path.insert(0, ".")
 from db import get_db, query, commit
 sys.path.remove(".")
 
+
 def try_login(email):
 	db = get_db()
 	if email in ["nilesrogoff@gmail.com", "mcdasethan2@gmail.com"]:
+		email = "niles.rogoff@apsva.us"
+	if email in ["ethan_sattler@brown.edu", "nilesr@vt.edu"]:
 		email = "941590@apsva.us"
 	if email.endswith("@apsva.us"):
 		student_id = email.replace("@apsva.us", "")
@@ -30,3 +33,5 @@ def try_auth(request, db):
 	if len(r) == 0: return False
 	return r[0].student_id
 
+def is_admin(user):
+	return not user.isnumeric()
