@@ -132,18 +132,38 @@ a.button.button-large.tabbutton.button-outline:hover {
 	padding-left: 3%;
 }
 
-.class-roster {
-	display: inline-block;
-	width: 35%;
+.admin-class-list {
+    display: inline-block;
+    vertical-align: top;
 	position: fixed;
-	top: 115px;
-	left: 66%;
+	width: 50%;
+	left: 50%;
 	padding-right: 5%;
-	padding-left: 3%;
+    padding-left: 3%;
+    max-height:80vh;
+}
+
+.linebreak {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #4c566a;
+    margin: 1em 0;
+    padding: 0;
+}
+
+.class-roster {
+    display: inline-block;
+    vertical-align: top;
+    width: 35%;
+	margin-left: 15%;
 }
 
 .class-roster-title {
-    
+    text-align: center;
+    color: #4c566a;
+    font-weight: bold;
+    margin-top: 1%;
 }
 
 .button {
@@ -206,6 +226,7 @@ mark {
 
 .tabs-container {
     margin-top: 1.5rem;
+    margin-bottom: 2%;
 }
 
 .schedule {

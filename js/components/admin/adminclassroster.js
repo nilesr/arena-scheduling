@@ -32,22 +32,24 @@ class AdminClassRosterTable extends React.Component {
                 </tr>)
         }
         
-        console.log(body)
         return (
-        <div>
-        <div className="class-roster-title">{className}</div>
-        <table style={{margin: "10px 2.5%", width: "95%"}}>
-		<thead>
-			<tr>
-				<th>Name</th>
-				<th>Student ID</th>
-				<th>Remove</th>
-			</tr>
-		</thead>
-        <tbody>
-            {body}
-        </tbody>
-	</table></div>)
+        [
+        <div key="class-roster-title" className="class-roster-title">{className}</div>,
+        <div key="linebreak" className="linebreak"></div>,
+        <div key="table" style={{overflowY: 'scroll'}}>
+            <table style={{margin: "10px 2.5%", width: "95%"}}>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Student ID</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                {body}
+            </tbody>
+	        </table>
+        </div>])
     }
 }
 
@@ -64,10 +66,6 @@ class AdminClassRoster extends React.Component {
             curClass: null,
             errMsg: null
         };
-    }
-    
-    reload() {
-
     }
 
     queryClass() {
@@ -124,12 +122,15 @@ class AdminClassRoster extends React.Component {
     }
 
     componentDidUpdate() {
+        console.log('aaaaaaaaaaaacc')
         if (this.state.curClass != this.props.curClass) {
             this.queryClass()
         }
     }
 
     render() {
+
+        console.log('classroster: ' + JSON.stringify(this.state.curClass))
         
         let c = this.state.curClass
         let preview = "Class Roster"
@@ -137,10 +138,9 @@ class AdminClassRoster extends React.Component {
             preview = "Class Roster: " + c.name + c.subsection + c.teacher + (c.block == "P" ? "PM" : c.block)
         }
 
-        console.log(this.props)
         return (
         <div className="class-roster">
-            <Expando type="dark" preview={preview} open={true}>
+            <ExpandoScroll type="dark" preview={preview} open={true}>
                 {this.state.curClass 
                     ? this.state.loading
                         ? 'Loading...'
@@ -148,7 +148,7 @@ class AdminClassRoster extends React.Component {
                             ? this.state.errMsg
                             : <AdminClassRosterTable roster={this.state.roster} class={this.state.curClass} />
                     : "Please select a class from the list"}
-            </Expando>
+            </ExpandoScroll>
         </div>)
     }
 }

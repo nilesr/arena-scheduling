@@ -59,9 +59,13 @@ class AdminClasses extends React.Component {
         var cats = groupBy(this.props.classes, e => e.category)
         var catkeys = Object.keys(cats)
         
-		return <div className="classes">
-			<input className="search" placeholder="Search for classes" value={this.state.i} onChange={(evt) => this.setState({i: evt.target.value})} />
-			{this.state.i == ""
+		return <div className="admin-class-list"><ExpandoScroll type="dark" preview="Find a Class" open={true}>
+            <div>
+			<input className="search" style={{marginTop: '1%', marginBottom: '2%'}} placeholder="Search for classes" value={this.state.i} onChange={(evt) => this.setState({i: evt.target.value})} />
+			</div>
+            <div className="linebreak"></div>
+            <div style={{overflowY: 'scroll'}}>
+            {this.state.i == ""
 				? catkeys.map((cat) => {
 						return <div key={cat}>
 							<h3 id={"cat-" + cat}>
@@ -78,7 +82,8 @@ class AdminClasses extends React.Component {
 							   onChange={this.props.onChange} setCurClass={this.props.setCurClass}
 					/>
 			}
-		</div>;
+            </div>
+		</ExpandoScroll></div>;
 	}
 	componentDidMount() {
 		if (this.props.cat) {
