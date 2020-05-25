@@ -2,7 +2,7 @@
 import requests
 CLIENT_ID = "349911277483-8flsja8q706v0jc4t5c45trk9u4b603n.apps.googleusercontent.com"
 REDIRECT_URI = "http://localhost:8080/authn"
-SCOPE = "https://www.googleapis.com/auth/userinfo.email"
+SCOPE = "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"
 CLIENT_SECRET = open("client_secret.txt").read().strip()
 openid_config = requests.get("https://accounts.google.com/.well-known/openid-configuration").json()
 
@@ -20,4 +20,4 @@ def get_email(request):
 	}
 	token = requests.post(openid_config["token_endpoint"], data=data).json()["access_token"]
 	r = requests.get(openid_config["userinfo_endpoint"], headers={"Authorization": "Bearer " + token})
-	return r.json()["email"]
+	return r.json()["email"], r.json()["name"]
