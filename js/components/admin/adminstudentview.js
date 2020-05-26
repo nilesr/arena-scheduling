@@ -26,21 +26,24 @@ var AdminScheduleTable = (props) => {
         })
     }
 
-    return <table style={{margin: "10px 2.5%", width: "95%"}}>
-	   <thead>
-		   <tr>
-			   <th>Block</th>
-			   <th>Course Code</th>
-			   <th>Name</th>
-			   <th>Teacher</th>
-			   <th>Room</th>
-			   <th className="printhide"></th>
-		   </tr>
-	   </thead>
-	   <tbody>
-			   {body}
-	   </tbody>
-	</table>
+    return <div>
+            <div className="class-roster-title">{props.student.student_username} ({props.student.student_id})</div>
+            <table style={{margin: "10px 2.5%", width: "95%"}}>
+               <thead>
+                       <tr>
+                               <th>Block</th>
+                               <th>Course Code</th>
+                               <th>Name</th>
+                               <th>Teacher</th>
+                               <th>Room</th>
+                               <th className="printhide"></th>
+                       </tr>
+               </thead>
+               <tbody>
+                               {body}
+               </tbody>
+            </table>
+        </div>;
 }
 
 class Student extends React.Component {
@@ -50,7 +53,9 @@ class Student extends React.Component {
     }
 
     render() {
-        return <div style={{overflowY: 'auto'}}><AdminScheduleTable classes={this.props.classes} schedule={this.props.schedule} student={this.props.student} /></div>
+        return <div style={{overflowY: 'auto'}}>
+            <AdminScheduleTable classes={this.props.classes} schedule={this.props.schedule} student={this.props.student} />
+        </div>
     }
 }
 
