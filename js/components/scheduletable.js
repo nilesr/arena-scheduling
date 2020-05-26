@@ -14,7 +14,7 @@ var ScheduleTable = (props) =>
 			   {props.tickets.map((t, i) => {
 				   var c = props.classes.filter(c => c.name == t.class_name && c.teacher == t.teacher && c.block == t.block)[0]
 				   return <tr key={i}>
-							   <td>{t.block}</td>
+							   <td>{t.block == "P" ? "PM" : t.block}</td>
 							   <td>{c.course_code}</td>
 							   <td><ClassName ticket={t} display_subsection={true} /></td>
 							   <td>{t.teacher}</td>

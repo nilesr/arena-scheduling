@@ -46,7 +46,7 @@ class AdminTabs extends React.Component
                 [<AdminClassRoster key="admin-class-roster" curClass={this.state.curClass} />,
                  <AdminClasses key="admin-classes" classes={this.props.classes} setCurClass={this.setCurClass}  />]],
             ["Students", 
-                [<AdminStudentView key="admin-student-view" curStudent={this.state.curStudent} />,
+                [<AdminStudentView key="admin-student-view" classes={this.props.classes} curStudent={this.state.curStudent} />,
                  <AdminStudentSearch key="admin-student-search" setCurStudent={this.setCurStudent} />]],
             ["Export", "Export"]
         ]
