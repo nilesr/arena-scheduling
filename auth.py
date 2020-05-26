@@ -14,12 +14,15 @@ def try_login(email, name):
 	if email.endswith("@apsva.us"):
 		student_id = email.replace("@apsva.us", "")
 	else:
-		return False, "user not registered"
+		return False, "The email address does not end in @apsva.us"
 	username_query = query(db, "select student_username from students where student_id = ?", student_id)
 	if len(username_query) == 0:
-		db.close()
-		return False, "No user exists with the student ID " + student_id
-	if not username_query[0].student_username:
+		if is_admin(student_id):
+			commit(db, "insert into students (student_id, student_username, time_allowed_in, num) values (?, ?, 0, NULL)", student_id, name)
+		else:
+			db.close()
+			return False, "No user exists with the student ID " + student_id
+	elif not username_query[0].student_username:
 		commit(db, "update students set student_username = ? where student_id = ?", name, student_id)
 	r = query(db, "select session_id from sessions where student_id = ?", student_id)
 	if len(r) > 0:
