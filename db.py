@@ -60,7 +60,8 @@ def init_db():
 	create table if not exists students (
 		student_id int unique, -- PK
 		student_username text,
-		time_allowed_in int
+		time_allowed_in int,
+		num int
 	);
 	""")
 	c.execute("create index if not exists students_student_id on students (student_id);")

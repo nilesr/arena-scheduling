@@ -24,8 +24,7 @@ for row in csv.reader(open("/home/niles/schedule.csv")):
 		titles = title.split("/")
 		if len(titles) != len(row[0].split("/")):
 			titles = [title]
-		cap = random.randint(1, 10)
-		cap = 30
+		cap = int(row[5]) if row[5] != "" else 999
 		for i, subsection in enumerate(titles):
 			if subsection == title:
 				subsection = ""

@@ -72,14 +72,16 @@ def logout(db):
 @authenticated
 def get_tickets(db, user):
 	tickets = query(db, "select * from student_schedules where student_id = ?", user, symbolize_names=False)
-	student = query(db, "select student_username, time_allowed_in from students where student_id = ?", user)[0]
+	student = query(db, "select student_username, time_allowed_in, num from students where student_id = ?", user)[0]
 	name = student.student_username
 	time_allowed_in = student.time_allowed_in
+	num = student.num
 	return {
 		"tickets": tickets,
 		"name": name,
 		"admin": auth.is_admin(user),
-		"time_left": time_allowed_in - time.time()
+		"time_left": time_allowed_in - time.time(),
+		"num": num,
 	}
 
 @put("/tickets")
