@@ -127,7 +127,7 @@ class AdminStudentView extends React.Component {
     render() {
         return (
         <div className="admin-student-view">
-            <ExpandoScroll type="dark" preview="Student Schedule" open={true}>
+            <ExpandoScroll type="dark" preview="Student Schedule" icon="user-circle-o">
                 {this.state.curStudent
                     ? this.state.loading
                         ? 'Loading...'

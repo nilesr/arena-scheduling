@@ -43,11 +43,11 @@ class AdminTabs extends React.Component
     render() {
         let tabs  = [
             ["Class Rosters",
-                [<AdminClassRoster key="admin-class-roster" curClass={this.state.curClass} />,
-                 <AdminClasses key="admin-classes" classes={this.props.classes} setCurClass={this.setCurClass}  />]],
+                [<AdminClassRoster key="admin-class-roster" curClass={this.state.curClass} onChange={this.props.onChange} />,
+                 <AdminClasses key="admin-classes" classes={this.props.classes} setCurClass={this.setCurClass}  onChange={this.props.onChange} />]],
             ["Students", 
-                [<AdminStudentView key="admin-student-view" classes={this.props.classes} curStudent={this.state.curStudent} />,
-                 <AdminStudentSearch key="admin-student-search" setCurStudent={this.setCurStudent} />]],
+                [<AdminStudentView key="admin-student-view" classes={this.props.classes} curStudent={this.state.curStudent} onChange={this.props.onChange} />,
+                 <AdminStudentSearch key="admin-student-search" setCurStudent={this.setCurStudent} onChange={this.props.onChange} />]],
             ["Export", "Export"]
         ]
         return <div>

@@ -127,7 +127,7 @@ class AdminStudentSearch extends React.Component {
 
     render() {
 
-        return <div className="admin-student-list"><ExpandoScroll type="dark" preview="Find a Student" open={true}>
+        return <div className="admin-student-list"><ExpandoScroll type="dark" preview="Find a Student" icon="address-card-o">
             <div>
 			<input className="search" style={{marginTop: '1%', marginBottom: '2%'}} placeholder="Search for a student" value={this.state.i} onChange={(evt) => this.setState({i: evt.target.value})} />
 			</div>

@@ -12,7 +12,8 @@ class AdminClassRosterTable extends React.Component {
         let className = "{0} ({1} block) - {2}".format((c.subsection ? c.subsection : c.name), (c.block == "P" ? "PM" : c.block), c.teacher)
 
         if (!confirm("Are you ABSOLUTELY sure you would like to remove " + student.student_username + " (" + student.student_id +  ") from " + className + "?")) return;
-	    netDelete("/teacher/remove/" + student.id, () => {console.log('removed')}, (e) => { window.alert("There was an error deleting your ticket: " + e); })
+
+	netDelete("/teacher/remove/" + student.id, this.props.onChange, (e) => { window.alert("There was an error deleting your ticket: " + e); })
 
     }
 
@@ -35,6 +36,7 @@ class AdminClassRosterTable extends React.Component {
         return (
         [
         <div key="class-roster-title" className="class-roster-title">{className}</div>,
+        (c.course_code != "" ? <div key="class-roster-cc" className="class-roster-title">Course code: {c.course_code}</div> : null),
         <div key="linebreak" className="linebreak"></div>,
         <div key="table" style={{overflowY: 'auto'}}>
             <table style={{margin: "10px 2.5%", width: "95%"}}>
@@ -134,13 +136,13 @@ class AdminClassRoster extends React.Component {
 
         return (
         <div className="class-roster">
-            <ExpandoScroll type="dark" preview={preview} open={true}>
+            <ExpandoScroll type="dark" preview={preview} icon="id-card-o">
                 {this.state.curClass 
                     ? this.state.loading
                         ? 'Loading...'
                         : this.state.errMsg != null
                             ? this.state.errMsg
-                            : <AdminClassRosterTable roster={this.state.roster} class={this.state.curClass} />
+                            : <AdminClassRosterTable roster={this.state.roster} class={this.state.curClass} onChange={this.props.onChange} />
                     : "Please select a class from the list"}
             </ExpandoScroll>
         </div>)

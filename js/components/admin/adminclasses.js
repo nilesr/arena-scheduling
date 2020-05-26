@@ -58,7 +58,7 @@ class AdminClasses extends React.Component {
         var cats = groupBy(this.props.classes, e => e.category)
         var catkeys = Object.keys(cats)
         
-		return <div className="admin-class-list"><ExpandoScroll type="dark" preview="Find a Class" open={true}>
+		return <div className="admin-class-list"><ExpandoScroll type="dark" preview="Find a Class" icon="calendar-o">
             <div>
 			<input className="search" style={{marginTop: '1%', marginBottom: '2%'}} placeholder="Search for classes" value={this.state.i} onChange={(evt) => this.setState({i: evt.target.value})} />
 			</div>
