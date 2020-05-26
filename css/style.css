@@ -249,21 +249,23 @@ mark {
 
 .schedule {
     display: grid;
-    grid-template-columns: 8.8% 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 0.5fr 3.55% 1fr 1fr 1fr 1fr 1fr 1fr 3.55% 1fr;
+    grid-template-columns: 11.4% 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 5.54% 1fr 1fr 1fr 9.4% 1fr 1fr 1fr 1fr 4.02% 1fr;
     height: 900px;
-    width: 740px;
+    width: 780px;
     grid-column-gap: 1px;
     grid-row-gap: 1px;
     background-color: black;
     border: 1px solid black;
 }
-.schedule > div {
+.schedule > div > div {
     padding: 10px 10px 0 10px;
     font-weight: bold;
     text-align: center;
-    background-color: white;
+}
+.schedule > div {
     position: relative;
+    background-color: white;
 }
 .sport {
     grid-column-start: 1;
@@ -315,9 +317,11 @@ mark {
     }
     .schedule {
 	width: 7.5in;
-	height: 9.12in;
+	height: 8.65in;
+	/*
 	grid-column-gap: 0.0138in;
 	grid-row-gap: 0.0138in;
+	*/
 	margin-bottom: 1in; /* shoves the table onto the next page */
     }
 }
@@ -333,4 +337,12 @@ mark {
 
 .expandoscroll-carat {
     margin-right: 20px;
+}
+
+.absolute-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }

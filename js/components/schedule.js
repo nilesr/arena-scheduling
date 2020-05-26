@@ -1,12 +1,14 @@
 var rows = [
-	["6AM to 9:15", "*", "*Planning", "Staff Meeting", "*Planning", "*Planning"],
+	//["6AM to 9:15", "*", "*Planning", "Staff Meeting", "*Planning", "*Planning"],
 	["", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
-	["9:24  to 10:15", "A", "Town Meeting", "A", "A", "A"],
-	["10:20 to 11:15", "B", "B", "B", "TA", "B"],
-	["11:10 to 11:55", "C", "D", "C", "C", "C"],
-	["12:35 to 1:25", "D", "E", "E", "D", "D"],
-	["1:30 to 2:15", "F", "F", "F", "E", "E"],
-	["2:20 to 3:15", "G", "G", "G", "F", "G"],
+	["9:24 to 10:10", "A", "Town Meeting", "A", "A", "A"],
+	["10:15 to 11:00", "B", "B", "B", "I", "B"],
+	["11:05 to 11:50", "C", "D", "C", "C", "C"],
+	["11:50 to 12:25", "LUNCH", "LUNCH", "LUNCH", "LUNCH", "LUNCH"],
+	["12:25 to 1:10", "D", "E", "E", "D", "D"],
+	["1:15 to 2:00", "F", "F", "F", "E", "E"],
+	["2:00 to 2:25", "I", "TA", "I", "TA", "I"],
+	["2:25 to 3:10", "G", "G", "G", "F", "G"],
 	["SPORTS BUS"], // .sport
 	["3:15 to 4:06", "TA", "H", "H", "H", "H"]
 ]
@@ -58,15 +60,25 @@ class Schedule extends React.Component {
 					var style = (this.state.colors && color) ? { backgroundColor: color } : {};
 					var t = bi >= 0 ? tickets.filter(t => t.block == cell)[0] : null;
 					var c = (t && this.state.rooms) ? this.props.classes.filter(c => c.name == t.class_name && c.subsection == t.subsection && c.teacher == t.teacher && c.block == t.block)[0] : null;
+					var s2 = {};
+					if ("0123456789".indexOf(cell[0]) >= 0) {
+						cell = cell.split(" ").map((c, i) => [c, <br key={i} />]);
+						s2.paddingTop = "1px"
+					}
+					if (cell == "LUNCH") {
+						s2.paddingTop = "22.5%";
+					}
 					return <div key={i + "-" + j} className={cell == "SPORTS BUS" ? "sport" : ""} style={style}>
-						{cell}
-						{t
-							? [
-								<div key={0} className="schedule-classname">{t.subsection == "" ? t.class_name : t.subsection}</div>,
-								(this.state.rooms ? <div key={1} className="schedule-classroom">{c.room}</div> : null),
-								<a key={2} className="button schedule-killbtn" onClick={() => killTicket(t.id, this.props.onChange)}>&times;</a>
-							]
-							: null}
+						<div className="absolute-fill" style={s2}>
+							{cell}
+							{t
+								? [
+									<div key={0} className="schedule-classname">{t.subsection == "" ? t.class_name : t.subsection}</div>,
+									(this.state.rooms ? <div key={1} className="schedule-classroom">{c.room}</div> : null),
+									<a key={2} className="button schedule-killbtn" onClick={() => killTicket(t.id, this.props.onChange)}>&times;</a>
+								]
+								: null}
+						</div>
 					</div>
 				}))}
 			</div>
