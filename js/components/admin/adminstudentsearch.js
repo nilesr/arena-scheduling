@@ -1,12 +1,79 @@
+class StudentRow extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        let c = this.props.student
+        return <tr key={c.student_id}>
+            <td>{c.student_username}</td>
+            <td>{c.student_id}</td>
+            <td><a className="button button-outline"  key={"button-student-" + (c.student_id)} onClick={() => this.props.setCurStudent(c) }>View Schedule</a></td>
+        </tr>
+    }
+}
+
+
 class StudentsList extends React.Component {
     constructor(props) {
         super(props)
     }
 
     render() {
-        return JSON.stringify(this.props.students)
+        let body = <tr><td colSpan="3" style={{textAlign: "center"}}>No students</td></tr>
+        if (this.props.students.length > 0) {
+            body = this.props.students.map(s => {
+                return <StudentRow key={"row-" + s.student_id} id={s.student_id} student={s} setCurStudent={this.props.setCurStudent} />
+            })
+        }
+
+        return <table style={{margin: "10px 2.5%", width: "95%"}}>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Student ID</th>
+				<th className="center">View Schedule</th>
+			</tr>
+		</thead>
+		<tbody>
+            {body}
+        </tbody>
+        </table>
     }
 }
+
+var replaceAll = function replaceAll(s, b, a) {
+	while (s.indexOf(b) >= 0) {
+		s = s.replace(b, a);
+	}
+	return s;
+}
+
+var filterStudents = function filterStudents(cs, i) {
+    
+    if (i == "") {
+        return cs
+    }
+
+	i = replaceAll(i, "/", " ").toLowerCase().split(" ")
+	cs = cs.filter(c => {
+		var ck = replaceAll((c.student_username + c.student_id).toLowerCase(), "/", " ")
+		for (let j = 0; j < i.length; j++) {
+			if (ck.indexOf(i[j]) < 0) return false;
+		}
+		return true;
+	})
+	cs.sort((a, b) => {
+		var an = a.student_username
+		var bn = b.student_username
+		var c1 = an.localeCompare(bn)
+        if (c1 != 0) return c1;
+        
+		return a.student_id.localeCompare(b.student_id)
+	})
+	return cs
+}
+
 
 
 class AdminStudentSearch extends React.Component {
@@ -46,7 +113,7 @@ class AdminStudentSearch extends React.Component {
                 ...this.state,
                 loading: false,
                 errMsg: null,
-                students: t['students']
+                students: t['students'].filter(s => Number.isInteger(s.student_id))
             })
         },
         (e) => {
@@ -70,7 +137,7 @@ class AdminStudentSearch extends React.Component {
                     ? "Loading..."
                     : this.state.errMsg
                         ? this.state.errMsg
-                        : <StudentsList students={this.state.students} />}
+                        : <StudentsList students={filterStudents(this.state.students, this.state.i)} setCurStudent={this.props.setCurStudent} />}
             </div>
             </ExpandoScroll>
             </div>

@@ -18,7 +18,7 @@ var ExpandoScroll = (props) => {
 			<i className={"expando-carat fa fa-caret-" + (open ? "down" : "right")} />
 			{props.preview}
 		</div>
-		{open ? <div className="expando-contents" style={{maxHeight: (props.height ? props.height : '70vh'), height: (props.height ? props.height : '70vh'), display: 'flex', flexDirection: 'column', overflow: 'hidden'}}>{props.children}</div> : null}
+		{open ? <div className="expando-contents" style={{maxHeight: (props.height ? props.height : '70vh'), height: (props.height ? props.height : '70vh'), display: 'flex', flexDirection: 'column', overflowY: 'hidden'}}>{props.children}</div> : null}
 	</div>;
 }
 window.ExpandoScroll = ExpandoScroll;

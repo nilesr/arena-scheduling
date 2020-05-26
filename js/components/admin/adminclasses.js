@@ -55,7 +55,6 @@ class AdminClasses extends React.Component {
 	}
 	render() {
         
-        console.log(this.props)
         var cats = groupBy(this.props.classes, e => e.category)
         var catkeys = Object.keys(cats)
         

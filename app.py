@@ -169,6 +169,18 @@ def teacher_delete_ticket(db, user, id):
 def get_all_students(db, user):
 	return {"students": query(db, "select * from students order by student_username", symbolize_names=False)}
 
+@route("/teacher/getstudentschedule")
+@require_admin
+def get_student_schedule(db, user):
+	q = dict(request.query)
+
+	student_id = q['student_id']
+	if not student_id:
+		abort(400, "Invalid Query")
+
+	return {"schedule": query(db, "select * from student_schedules where student_id = ?", student_id, symbolize_names=False)}
+
+
 @route("/<filename:path>")
 def static(filename):
 	return static_file(filename, root=root)
