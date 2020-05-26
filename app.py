@@ -185,6 +185,8 @@ def get_student_schedule(db, user):
 
 @route("/<filename:path>")
 def static(filename):
+	if "client_secret.txt" in filename or "schedule.db" in filename:
+		abort(403, "Permission denied")
 	return static_file(filename, root=root)
 
 @error(403)
