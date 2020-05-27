@@ -8,13 +8,14 @@ class App extends React.Component {
 			loading: true,
 			name: false,
 			isAdmin: false,
-			time_left: -1
+			time_left: -1,
+			num: -1,
 		};
 	}
 	checkTickets() {
 		this.setState(s => {return {...s, loading: true}; })
 		get("/tickets", {},
-			(t) => this.setState(s => { return {...s, loading: false, loggedIn: true, tickets: t.tickets, name: t.name, time_left: t.time_left, isAdmin: t.admin}; }),
+			(t) => this.setState(s => { return {...s, loading: false, loggedIn: true, tickets: t.tickets, name: t.name, time_left: t.time_left, isAdmin: t.admin, num: t.num}; }),
 			(e) => this.setState(s => { return {...s, loading: false, loggedIn: false} }),
 		)
 	}
@@ -37,6 +38,7 @@ class App extends React.Component {
 						{this.state.loggedIn ? 
 							<ul className="navigation-list float-right">
 								<li className="navigation-item">Welcome {this.state.name}</li>
+								<li className="navigation-item"><Timecover time_left={this.state.time_left} name={this.state.name} num={this.state.num} /></li>
 								<Logout />
 							</ul>
 							: null }

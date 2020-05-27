@@ -349,3 +349,13 @@ mark {
   width: 100%;
   height: 100%;
 }
+
+.timecover-warning {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 50px;
+  background-color: white;
+  z-index: 20;
+}
