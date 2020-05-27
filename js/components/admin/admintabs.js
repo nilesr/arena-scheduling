@@ -48,7 +48,7 @@ class AdminTabs extends React.Component
             ["Students", 
                 [<AdminStudentView key="admin-student-view" classes={this.props.classes} curStudent={this.state.curStudent} onChange={this.props.onChange} />,
                  <AdminStudentSearch key="admin-student-search" setCurStudent={this.setCurStudent} onChange={this.props.onChange} />]],
-            ["Export", "Export"]
+            ["Export", <AdminExport />]
         ]
         return <div>
             <section className="container tabs-container">

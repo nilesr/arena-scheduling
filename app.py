@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, sys,time
+import os, sys, time, io, csv
 from bottle import request, response, route, static_file, post, run, abort, error, put, delete, redirect
 sys.path.insert(0, ".")
 import auth, oauth
@@ -31,7 +31,7 @@ def time_checked(fn):
 	def newfn(db, user, *args, **kwargs):
 		time_allowed = query(db, "select time_allowed_in from students where student_id = ?", user)[0].time_allowed_in
 		if time.time() < time_allowed:
-			abort(403, {"error": "Too early", "time_allowed_in": time_allowed})
+			abort(403, "Too early. You are allowed to begin scheduling on " + time.strftime("%A, %B %e, %H:%M:%S %Z", time.localtime(time_allowed)))
 		return fn(db, user, *args, **kwargs)
 	return newfn
 
@@ -154,7 +154,7 @@ def get_class_roster(db, user):
 	if not block or not name or not teacher:
 		abort(400, "Invalid Query")
 
-	return {"roster": query(db, "select * from student_schedules join students ON student_schedules.student_id = students.student_id and block = ? and class_name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher, symbolize_names=False)}
+	return {"roster": query(db, "select * from student_schedules join students ON student_schedules.student_id = students.student_id where block = ? and class_name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher, symbolize_names=False)}
 
 @delete("/teacher/remove/<id>")
 @require_admin
@@ -181,6 +181,30 @@ def get_student_schedule(db, user):
 		abort(400, "Invalid Query")
 
 	return {"schedule": query(db, "select * from student_schedules where student_id = ?", student_id, symbolize_names=False)}
+
+@route("/teacher/export")
+@require_admin
+def export(db, user):
+	f = io.StringIO()
+	c = csv.DictWriter(f, fieldnames=["block", "class_name", "subsection", "teacher", "course_code", "student_id", "student_name"])
+	q = query(db, """
+	select t.block, t.class_name, t.subsection, t.teacher, c.course_code, t.student_id, s.student_username as student_name
+			from student_schedules t
+			left join classes c
+					on  c.block = t.block
+					and c.name = t.class_name
+					and c.subsection = t.subsection
+					and c.teacher = t.teacher
+			left join students s
+					on  s.student_id = t.student_id
+	""", symbolize_names = False)
+	c.writeheader()
+	for r in q:
+		c.writerow(r)
+	f.seek(0)
+	response.content_type = 'application/csv'
+	response.set_header("content-disposition", "attachment; filename=\"export.csv\"")
+	return f.read()
 
 
 @route("/<filename:path>")
