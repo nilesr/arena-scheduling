@@ -117,6 +117,26 @@ def init_db():
 	  c.cap-(select count(*) from student_schedules ss where ss.block = c.block and ss.class_name = c.name and ss.teacher = c.teacher) as remaining_slots
 	from classes c; 
 	""")
+	c.execute("""
+	create table if not exists waitlist (
+		student_id int not null, -- FK to students
+		block char not null,
+		name text not null,
+		subsection text not null,
+		teacher text not null,
+		note text not null,
+		foreign key(student_id) references students(student_id)
+	);
+	""")
+	c.execute("""
+	create trigger if not exists waitlist_fk
+	before insert on student_schedules
+	begin
+		select (case when (select 1 from classes where block = NEW.block and name = NEW.class_name and subsection = NEW.subsection and teacher = NEW.teacher) is null
+			then raise(fail, "Attempt to add a row to waitlist that does not reference a row in classes")
+			else 1 end);
+	end;
+	""")
 	if len(c.execute("select 1 from students where student_id = ?", [941590]).fetchall()) == 0:
 		c.execute("insert into students (student_id, student_username, time_allowed_in) values (?, ?, ?)", [941590, "Niles Rogoff", 0])
 	db.commit()

@@ -76,12 +76,14 @@ def get_tickets(db, user):
 	name = student.student_username
 	time_allowed_in = student.time_allowed_in
 	num = student.num
+	waitlists = query(db, "select count(*) as count from waitlist where student_id = ?", user)[0].count
 	return {
 		"tickets": tickets,
 		"name": name,
 		"admin": auth.is_admin(user),
 		"time_left": time_allowed_in - time.time(),
 		"num": num,
+		"waitlists": waitlists,
 	}
 
 @put("/tickets")
@@ -136,6 +138,35 @@ def delete_ticket(db, user, id):
 	commit(db, "delete from student_schedules where student_id = ? and id = ?", user, id)
 	return {}
 
+@put("/waitlist")
+@time_checked
+def waitlist(db, user):
+	# Check valid block
+	block = request.forms.get("block")
+	if len(block) != 1 or block not in "ABCDEFGHP":
+		abort(400, "Invalid Block")
+
+	name = request.forms.get("name")
+	subsection = request.forms.get("subsection")
+	teacher = request.forms.get("teacher")
+
+	# Check that the class exists
+	r = query(db, "select * from classes where block = ? and name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher)
+	if len(r) == 0:
+		abort(400, "That class doesn't exist")
+	if len(r) > 1:
+		abort(500, "Database invariant violated")
+
+	note = request.forms.get("note")
+
+	# Check the length of the note
+	if len(note) < 30:
+		abort(400, "Your note must be longer (minimum 30 characters)")
+
+	row = commit(db, "insert into waitlist (student_id, block, name, subsection, teacher, note) values (?, ?, ?, ?, ?, ?)", user, block, name, subsection, teacher, note)
+	return {"waitlist": row}
+
+
 @route("/classes")
 @with_db
 def get_classes(db):
@@ -186,9 +217,10 @@ def get_student_schedule(db, user):
 @require_admin
 def export(db, user):
 	f = io.StringIO()
-	c = csv.DictWriter(f, fieldnames=["block", "class_name", "subsection", "teacher", "course_code", "student_id", "student_name"])
+	c = csv.DictWriter(f, fieldnames=["block", "class_name", "subsection", "teacher", "course_code", "student_id", "student_name", "waitlisted", "waitlist_reason"])
 	q = query(db, """
-	select t.block, t.class_name, t.subsection, t.teacher, c.course_code, t.student_id, s.student_username as student_name
+	select t.block, t.class_name, t.subsection, t.teacher, c.course_code, t.student_id, s.student_username as student_name,
+				 "" as waitlisted, "" as waitlist_reason
 			from student_schedules t
 			left join classes c
 					on  c.block = t.block
@@ -199,6 +231,19 @@ def export(db, user):
 					on  s.student_id = t.student_id
 	""", symbolize_names = False)
 	c.writeheader()
+	for r in q:
+		c.writerow(r)
+	q = query(db, """
+	select w.block, w.name as class_name, w.subsection, w.teacher, c.course_code, w.student_id, s.student_username as student_name, "WAITLISTED" as waitlisted, note as waitlist_reason
+			from waitlist w
+			left join classes c
+					on  c.block = w.block
+					and c.name = w.name
+					and c.subsection = w.subsection
+					and c.teacher = w.teacher
+			left join students s
+					on  s.student_id = w.student_id
+	""", symbolize_names = False)
 	for r in q:
 		c.writerow(r)
 	f.seek(0)

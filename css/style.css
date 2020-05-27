@@ -371,3 +371,18 @@ mark {
   background-color: white;
   z-index: 20;
 }
+
+.waitlists-warning {
+    background-color: pink;
+    border: 1px dashed red;
+    border-radius: 19px;
+    height: 52px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.waitlist-button {
+    margin-left: 5px;
+    padding: 0 10px;
+    color: black;
+}

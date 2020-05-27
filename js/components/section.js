@@ -8,6 +8,21 @@ var schedule = function schedule(c, oc) {
 	put("/tickets", obj, oc, e => { window.alert(e); oc(); })
 }
 
+var waitlist = function waitlist(c, oc) {
+	if (!confirm("Waitlisting a class should only be done when you cannot schedule yourself for required classes. There is no guarentee that you will be admitted to this class. Are you sure you want to add yourself to the waitlist?")) return;
+	do {
+		var p = prompt("Please enter a description of why you cannot add the class. " + (p === undefined ? "" : " Your response must be at least 30 characters."), p)
+	} while (p.length < 30);
+	var obj = {
+		block: c.block,
+		name: c.name,
+		subsection: c.subsection,
+		teacher: c.teacher,
+		note: p,
+	}
+	put("/waitlist", obj, oc, e => { window.alert(e); oc(); })
+}
+
 var SectionList = (props) => {
 	return <table style={{margin: "10px 2.5%", width: "95%"}}>
 		<thead>
@@ -36,6 +51,9 @@ var SectionList = (props) => {
 									? "You are in this section"
 									: "Add To Schedule (" + (c.block == "P" ? "PM" : c.block) + " Block)"
 							}
+						</a>
+						<a title="Waitlist" className="button button-outline waitlist-button" onClick={() => waitlist(c, props.onChange)}>
+							<i className="fa fa-exclamation-triangle" />
 						</a>
 					</td>
 				</tr>;
