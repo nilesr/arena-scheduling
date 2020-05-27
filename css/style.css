@@ -196,8 +196,20 @@ a.button.button-large.tabbutton.button-outline:hover {
     .smallschedule {
 	display: none;
     }
-    .class-roster {
-        display: none;
+}
+@media only screen and (max-width: 1350px) {
+    .class-roster, .admin-student-view {
+        margin-left: 10px;
+    }
+    .admin-class-list {
+	padding-left: 10px;
+	padding-right: 10px;
+	left: 35%;
+	width: 65%;
+    }
+    .admin-student-list {
+	left: 45%;
+	width: 55%;
     }
 }
 
