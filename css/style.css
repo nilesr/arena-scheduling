@@ -287,6 +287,9 @@ mark {
     border: none;
 }
 .schedule-classroom {
+    position: absolute;
+    top: 0px;
+    left: 4px;
     font-weight: 300;
     font-size: 80%;
 }
