@@ -1,3 +1,4 @@
+/*
 var PADDING=5;
 
 var addedCourses = [];
@@ -23,19 +24,22 @@ function computeDimensions(block) {
   }
   return dims
 }
+*/
 
 var SmallSchedule = (props) => {
+	/*
 	return <div className="smallschedule" id="smallschedule">
 		<img src="./schedule.png" style={{position: "absolute"}} />
 		<div className="coursechip" style={{width: "50%"}}>a</div>
-		{/*<div className="coursechip" style={computeDimensions("A")[0]}>hello</div>*/}
-		{/*props.tickets.map((ticket) => {
+		<div className="coursechip" style={computeDimensions("A")[0]}>hello</div>
+		{props.tickets.map((ticket) => {
 			if(ticket.block == "A") {
 				return <div className="coursechip" style={computeDimensions("A")[0]}>hello</div>
 			}
-		})*/}
+		})}
 	</div>
-	/*return <div className="smallschedule">
+	*/
+	return <div className="smallschedule">
 		{Array.prototype.slice.call("ABCDEFGHP", 0).map(block => {
 			var ts = props.tickets.filter(t => t.block == block)
 			var t = ts.length == 0 ? null : ts[0];
@@ -50,6 +54,6 @@ var SmallSchedule = (props) => {
 					: null}
 			</div>;
 		})}
-	</div>;*/
+	</div>;
 }
 window.SmallSchedule = SmallSchedule;
