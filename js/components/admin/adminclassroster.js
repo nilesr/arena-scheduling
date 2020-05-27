@@ -66,7 +66,8 @@ class AdminClassRoster extends React.Component {
         this.state = {
             loading: false,
             curClass: null,
-            errMsg: null
+            errMsg: null,
+            stale: props.stale
         };
     }
 
@@ -79,6 +80,10 @@ class AdminClassRoster extends React.Component {
         })
 
         let c = this.props.curClass
+        if (!c) {
+            return
+        }
+
         get("/roster", {
             'name': c.name,
             'subsection': c.subsection,
@@ -124,7 +129,19 @@ class AdminClassRoster extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.state.curClass != this.props.curClass) {
+        if (this.state.curClass != this.props.curClass || this.props.stale != this.state.stale) {
+
+            if (this.props.stale != this.state.stale) {
+                this.setState({
+                    ...this.state,
+                    stale: this.state.stale + 1
+                }, () => {
+                    this.queryClass()
+                })
+
+                return
+            }
+
             this.queryClass()
         }
     }
@@ -142,7 +159,7 @@ class AdminClassRoster extends React.Component {
                         ? 'Loading...'
                         : this.state.errMsg != null
                             ? this.state.errMsg
-                            : <AdminClassRosterTable roster={this.state.roster} class={this.state.curClass} onChange={this.props.onChange} />
+                            : <AdminClassRosterTable roster={this.state.roster} class={this.state.curClass} onChange={this.props.onChange} stale={this.props.stale} />
                     : "Please select a class from the list"}
             </ExpandoScroll>
         </div>)

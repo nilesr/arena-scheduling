@@ -53,7 +53,7 @@ class App extends React.Component {
 						? (this.state.tickets === false || this.state.classes === false)
 							? "Loading..."
 							: this.state.isAdmin
-								? <AdminView classes={this.state.classes} />
+								? <AdminView classes={this.state.classes} onChange={() => { this.checkTickets(); this.fetchClasses(); }}  />
 								: <Tabs tickets={this.state.tickets} classes={this.state.classes} onChange={() => { this.checkTickets(); this.fetchClasses(); }} />
 						: <Login />}
 			</main>

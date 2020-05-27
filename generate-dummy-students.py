@@ -39,10 +39,11 @@ for i in range(15):
     student_id = random.randint(1000000, 2000000)
     c.execute("""
     INSERT INTO `students`(`student_id`,`student_username`,`time_allowed_in`) VALUES (?,?,?);
-    """, (student_id, names.get_full_name(), 0))
+    """, (names.get_full_name(), student_id, 0))
 
     c.execute("""
     INSERT INTO `student_schedules`(`student_id`,`block`,`class_name`,`subsection`,`teacher`) VALUES (?,?,?,?,?);
     """, (student_id, "B", "AP Modern Europe", "", "David"))
 
     db.commit()
+    db.close()

@@ -1,8 +1,8 @@
-function removeStudent(c, student, tid) {
+function removeStudent(c, student, tid, cbs, cbf) {
     let className = "{0} ({1} block) - {2}".format((c.subsection ? c.subsection : c.name), (c.block == "P" ? "PM" : c.block), c.teacher)
 
     if (!confirm("Are you ABSOLUTELY sure you would like to remove " + student.student_username + " (" + student.student_id +  ") from " + className + "?")) return;
-    netDelete("/teacher/remove/" + tid, () => this.props.onChange, (e) => { window.alert("There was an error deleting your ticket: " + e); })
+    netDelete("/teacher/remove/" + tid, cbs, cbf);
 
 }
 
@@ -18,7 +18,8 @@ var AdminScheduleTable = (props) => {
                         <td>{t.teacher}</td>
                         <td>{c.room}</td>
                         <td className="printhide">
-                                <a className="button" onClick={() => removeStudent(c, props.student, t.id)}>
+                                <a className="button" onClick={() => removeStudent(c, props.student, t.id, props.onChange,
+                                    (e) => { window.alert("There was an error deleting your ticket: " + e)})}>
                                         <i className="fa fa-trash" aria-hidden="true" />
                                 </a>
                         </td>
@@ -54,7 +55,7 @@ class Student extends React.Component {
 
     render() {
         return <div style={{overflowY: 'auto'}}>
-            <AdminScheduleTable classes={this.props.classes} schedule={this.props.schedule} student={this.props.student} />
+            <AdminScheduleTable classes={this.props.classes} schedule={this.props.schedule} student={this.props.student} onChange={this.props.onChange} stale={this.props.stale}  />
         </div>
     }
 }
@@ -67,7 +68,8 @@ class AdminStudentView extends React.Component {
         this.state = {
             loading: true,
             errMsg: null,
-            curStudent: null
+            curStudent: null,
+            stale: props.stale
         }
 
         this.fetchStudentSched = this.fetchStudentSched.bind(this)
@@ -81,6 +83,10 @@ class AdminStudentView extends React.Component {
             loading: true,
             curStudent: s
         })
+
+        if (!s) {
+            return
+        }
 
 
         get("/teacher/getstudentschedule", {
@@ -123,7 +129,20 @@ class AdminStudentView extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.state.curStudent != this.props.curStudent && this.props.curStudent != null) {
+
+        if ((this.state.curStudent != this.props.curStudent && this.props.curStudent != null) || this.props.stale != this.state.stale) {
+
+            if (this.props.stale != this.state.stale) {
+                this.setState({
+                    ...this.state,
+                    stale: this.state.stale + 1
+                }, () => {
+                    this.fetchStudentSched()
+                })
+
+                return
+            }
+
             this.fetchStudentSched()
         }
     }
@@ -138,7 +157,7 @@ class AdminStudentView extends React.Component {
                         ? 'Loading...'
                         : this.state.errMsg
                             ? this.state.errMsg
-                            : <Student classes={this.props.classes} student={this.state.curStudent} schedule={this.state.schedule} />
+                            : <Student classes={this.props.classes} student={this.state.curStudent} schedule={this.state.schedule} onChange={this.props.onChange} stale={this.props.stale} />
                     : "Please select a student from the list"}
             </ExpandoScroll>
         </div>)
