@@ -24,6 +24,9 @@ var now = function now() {
 var hrt = function hrt(t) {
 	return new Date(t*1000).toLocaleString()
 }
+var easternp = function easternp() {
+	return (new Date().getTimezoneOffset()/60) == 4;
+}
 
 class Timecover extends React.Component {
 	constructor(props) {
@@ -47,7 +50,7 @@ class Timecover extends React.Component {
 			<section className="container">
 				<h2>Welcome to Arena Scheduling, {this.props.name}</h2>
 				<h3>Your number is {this.props.num + 1}</h3>
-				<h3>You can schedule on {hrt(this.state.enter_time)}, which is in {hr(this.state.time_left)}</h3>
+				<h3>You can schedule on {hrt(this.state.enter_time)}, which is in {hr(this.state.time_left)}{easternp() ? null : <span> <mark>Local Time</mark> (not Eastern)</span>}</h3>
 				<a className="button" onClick={() => this.setState(s => { return {...s, open: false}; })}>Browse Course Catalog (read-only)</a>
 			</section>
 		</div>;
