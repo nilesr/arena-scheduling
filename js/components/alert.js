@@ -4,7 +4,7 @@ function Alert(props) {
   return (
     <div className={"alert alert-" + props.variant}>
       {props.static ? null : <div className="alert-close" onClick={() => setShow(false)}>&times;</div>}
-      {props.children}
+      <div className="alert-msg">{props.children}</div>
     </div>
   );
 }

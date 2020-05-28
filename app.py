@@ -196,10 +196,8 @@ def delete_ticket(db, user, id):
 	
 
 	query(db, "delete from student_schedules where student_id = ? and id = ?", user, id)
-
 	ticket = r[0]
 	fix_waitlist(db, ticket['block'], ticket['class_name'], ticket['subsection'], ticket['teacher'])
-
 	db.commit()
 
 	return {}

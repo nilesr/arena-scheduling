@@ -132,7 +132,7 @@ class AdminStudentSearch extends React.Component {
 			<input className="search" style={{marginTop: '1%', marginBottom: '2%'}} placeholder="Search for a student" value={this.state.i} onChange={(evt) => this.setState({i: evt.target.value})} />
 			</div>
             <div className="linebreak"></div>
-            <Alert variant="warning" body="The names of students who have never logged in will show up as 'TBD'" />
+            <Alert variant="warning" children="The names of students who have never logged in will show up as 'TBD'" />
             <div style={{overflowY: 'auto'}}>
                 {this.state.loading
                     ? "Loading..."

@@ -380,6 +380,11 @@ mark {
     color: black;
 }
 
+.alert-msg {
+    width: 97%;
+    margin: 1%;
+}
+
 .alert {
   border-radius: 10px;
   background-color: var(--variant-bg);
@@ -387,6 +392,7 @@ mark {
   border: 1px solid var(--variant-border);
   padding: 0 10px;
   position: relative;
+  margin-bottom: 1%;
 }
 /* stolen from bootstrap */
 .alert-warning {
@@ -402,6 +408,7 @@ mark {
 
 .alert-close, .modal-close {
   padding: 0 6.5px;
+  background-color: inherit;
 }
 .modal-close {
   margin-top: 25px;
