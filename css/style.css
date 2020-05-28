@@ -286,7 +286,7 @@ mark {
 .schedule-classname {
     font-weight: 300;
 }
-.schedule-killbtn, .alert-close {
+.schedule-killbtn, .alert-close, .modal-close {
     position: absolute;
     top: 3px;
     right: 3px;
@@ -374,15 +374,6 @@ mark {
   z-index: 20;
 }
 
-.waitlists-warning {
-    background-color: pink;
-    border: 1px dashed red;
-    border-radius: 19px;
-    height: 52px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
 .waitlist-button {
     margin-left: 5px;
     padding: 0 10px;
@@ -394,7 +385,7 @@ mark {
   background-color: var(--variant-bg);
   color: var(--variant-text);
   border: 1px solid var(--variant-border);
-  padding: 10px;
+  padding: 0 10px;
   position: relative;
 }
 /* stolen from bootstrap */
@@ -409,6 +400,29 @@ mark {
   --variant-border: #f4c5cb;
 }
 
-.alert-close {
+.alert-close, .modal-close {
   padding: 0 6.5px;
+}
+.modal-close {
+  margin-top: 25px;
+  margin-right: 25px;
+}
+.modal-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  background-color: rgba(200, 200, 200, 0.5);
+}
+.modal {
+  z-index: 150;
+  position: relative;
+  top: 80px;
+  margin: auto;
+  max-width: 75%;
+  padding: 30px;
+  border-radius: 50px;
+  background-color: white;
 }

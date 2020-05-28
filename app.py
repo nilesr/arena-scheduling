@@ -76,7 +76,7 @@ def get_tickets(db, user):
 	name = student.student_username
 	time_allowed_in = student.time_allowed_in
 	num = student.num
-	waitlists = query(db, "select count(*) as count from waitlist where student_id = ?", user)[0].count
+	waitlists = query(db, "select * from waitlist where student_id = ?", user, symbolize_names=False)
 	return {
 		"tickets": tickets,
 		"name": name,
@@ -166,6 +166,27 @@ def waitlist(db, user):
 	row = commit(db, "insert into waitlist (student_id, block, name, subsection, teacher, note) values (?, ?, ?, ?, ?, ?)", user, block, name, subsection, teacher, note)
 	return {"waitlist": row}
 
+@delete("/waitlist")
+@time_checked
+def student_delete_waitlist(db, user):
+	q = dict(request.query)
+
+	block = q['block']
+	name = q['name']
+	subsection = q['subsection'] if q['subsection'] else ""
+	teacher = q['teacher']
+	student_id = user
+
+	if not block or not name or not teacher or not student_id:
+		abort(400, "Invalid deletion request")
+
+	r = query(db, "select 1 from waitlist where block = ? and name = ? and subsection = ? and teacher = ? and student_id = ?", block, name, subsection, teacher, student_id)
+	if len(r) == 0:
+		abort(400, "Bad waitlist entry specified")
+
+	commit(db, "delete from waitlist where block = ? and name = ? and subsection = ? and teacher = ? and student_id = ?", block, name, subsection, teacher, student_id)
+	return {}
+
 
 @route("/classes")
 @with_db
@@ -222,7 +243,7 @@ def get_student_schedule(db, user):
 
 @delete("/teacher/waitlist")
 @require_admin
-def teacher_delete_ticket(db, user):
+def teacher_delete_waitlist(db, user):
 	q = dict(request.query)
 
 	block = q['block']

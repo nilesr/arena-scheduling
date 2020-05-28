@@ -9,7 +9,7 @@ var schedule = function schedule(c, oc) {
 }
 
 var waitlist = function waitlist(c, oc) {
-	if (!confirm("Waitlisting a class should only be done when you cannot schedule yourself for required classes. There is no guarentee that you will be admitted to this class. Are you sure you want to add yourself to the waitlist?")) return;
+	if (!confirm("Waitlisting a class should only be done when you cannot make your schedule work yourself. There is no guarentee that you will be admitted to this class. Are you sure you want to add yourself to the waitlist?")) return;
 	do {
 		var p = prompt("Please enter a description of why you cannot add the class. " + (p === undefined ? "" : " Your response must be at least 30 characters."), p)
 	} while (p.length < 30);

@@ -56,10 +56,12 @@ class Timecover extends React.Component {
 		</div>;
 	}
 	render() {
-		return <span>
-			{this.state.time_left > 0 ? <span onClick={() => this.setState(s => { return {...s, open: true}; })} style={{cursor: "pointer"}}>{hr(this.state.time_left)} remaining</span> : null}
-			{this.state.open && this.state.time_left > 0 ? this.make_warning() : null}
-		</span>;
+		return (this.state.time_left > 0
+			? <li className="navigation-item">
+				<span onClick={() => this.setState(s => { return {...s, open: true}; })} style={{cursor: "pointer"}}>{hr(this.state.time_left)} remaining</span>
+				{this.state.open ? this.make_warning() : null}
+			  </li>
+			: null);
 	}
 }
 

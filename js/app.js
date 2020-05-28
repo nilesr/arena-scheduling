@@ -10,5 +10,5 @@ if (!String.prototype.format) {
     };
   }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<ErrorBoundary><App /></ErrorBoundary>, document.getElementById("root"));
 

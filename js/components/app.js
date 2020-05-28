@@ -10,7 +10,7 @@ class App extends React.Component {
 			isAdmin: false,
 			time_left: -1,
 			num: -1,
-			waitlists: -1,
+			waitlists: false,
 		};
 	}
 	checkTickets() {
@@ -41,8 +41,8 @@ class App extends React.Component {
 						{this.state.loggedIn ? 
 							<ul className="navigation-list float-right" style={{marginBottom: 0}}>
 								<li className="navigation-item">Welcome {this.state.name}</li>
-								{this.state.waitlists > 0 ? <WaitlistsWarning n={this.state.waitlists} /> : null}
-								<li className="navigation-item"><Timecover time_left={this.state.time_left} name={this.state.name} num={this.state.num} /></li>
+								{this.state.waitlists.length > 0 ? <WaitlistsWarning waitlists={this.state.waitlists} onChange={() => { this.checkTickets(); this.fetchClasses(); }} /> : null}
+								<Timecover time_left={this.state.time_left} name={this.state.name} num={this.state.num} />
 								<Logout />
 							</ul>
 							: null }
