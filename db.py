@@ -26,6 +26,8 @@ def commit(db, q, *args, symbolize_names =  True):
 	c.execute(q, args) # no splat!
 	r = c.lastrowid
 	db.commit()
+	print(q, args)
+	print(r)
 	return r
 
 def get_db():
@@ -114,7 +116,8 @@ def init_db():
 	c.execute("""
 	create view if not exists classes_avail as
 	select c.name, c.block, c.subsection, c.teacher, c.cap, c.course_code, c.room, c.category,
-	  c.cap-(select count(*) from student_schedules ss where ss.block = c.block and ss.class_name = c.name and ss.teacher = c.teacher) as remaining_slots
+	  c.cap-(select count(*) from student_schedules ss where ss.block = c.block and ss.class_name = c.name and ss.teacher = c.teacher) as remaining_slots,
+		(select count(*) from waitlist w where w.block = c.block and w.name = c.name and w.teacher = c.teacher and w.block = c.block) as waitlist
 	from classes c; 
 	""")
 	c.execute("""

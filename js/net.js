@@ -53,7 +53,7 @@ window.post = function post(path, obj, suc, rej) {
 window.put = function put(path, obj, suc, rej) {
 	fetchish("PUT", path, makefd(obj), suc, rej);
 }
-window.netDelete = function netDelete(path, suc, rej) {
-	fetchish("DELETE", path, undefined, suc, rej);
+window.netDelete = function netDelete(path, args, suc, rej) {
+	fetchish("DELETE", makepath(path, args), undefined, suc, rej);
 }
 

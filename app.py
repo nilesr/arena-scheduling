@@ -185,7 +185,11 @@ def get_class_roster(db, user):
 	if not block or not name or not teacher:
 		abort(400, "Invalid Query")
 
-	return {"roster": query(db, "select * from student_schedules join students ON student_schedules.student_id = students.student_id where block = ? and class_name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher, symbolize_names=False)}
+	return {
+		"roster": query(db, "select * from student_schedules join students ON student_schedules.student_id = students.student_id where block = ? and class_name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher, symbolize_names=False),
+		"waitlist": query(db, "select * from waitlist join students ON waitlist.student_id = students.student_id where block = ? and name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher, symbolize_names=False),
+		"class": query(db, "select * from classes_avail where block = ? and name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher, symbolize_names=False)[0],
+	}
 
 @delete("/teacher/remove/<id>")
 @require_admin
@@ -212,6 +216,27 @@ def get_student_schedule(db, user):
 		abort(400, "Invalid Query")
 
 	return {"schedule": query(db, "select * from student_schedules where student_id = ?", student_id, symbolize_names=False)}
+
+@delete("/teacher/waitlist")
+@require_admin
+def teacher_delete_ticket(db, user):
+	q = dict(request.query)
+
+	block = q['block']
+	name = q['name']
+	subsection = q['subsection'] if q['subsection'] else ""
+	teacher = q['teacher']
+	student_id = q['student_id']
+
+	if not block or not name or not teacher or not student_id:
+		abort(400, "Invalid deletion request")
+
+	r = query(db, "select 1 from waitlist where block = ? and name = ? and subsection = ? and teacher = ? and student_id = ?", block, name, subsection, teacher, student_id)
+	if len(r) == 0:
+		abort(400, "Bad waitlist entry specified")
+
+	commit(db, "delete from waitlist where block = ? and name = ? and subsection = ? and teacher = ? and student_id = ?", block, name, subsection, teacher, student_id)
+	return {}
 
 @route("/teacher/export")
 @require_admin

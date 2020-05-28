@@ -16,7 +16,10 @@ var AdminSectionList = (props) => {
 					<td><ClassName cls={c} /></td>
                     <td>{c.teacher}</td>
 					<td>{c.block == "P" ? "PM" : c.block}</td>
-					<td className={filled ? "red" : (c.remaining_slots <= 5 ? "gold" : "")} style={{fontWeight: "bold"}}>({c.cap - c.remaining_slots}/{c.cap})</td>
+					<td className={filled ? "red" : (c.remaining_slots <= 5 ? "gold" : "")} style={{fontWeight: "bold"}}>
+						({c.cap - c.remaining_slots}/{c.cap})
+						{c.waitlist > 0 ? <div className="red">{c.waitlist} waitlisted</div> : null}
+					</td>
                     <td className="center">
 						<a className="button button-outline" key={"button-" + (c.name + c.subsection + c.teacher + c.block)} onClick={() => props.setCurClass(c) }>View Class Roster</a>
 					</td>

@@ -2,7 +2,7 @@ function removeStudent(c, student, tid, cbs, cbf) {
     let className = "{0} ({1} block) - {2}".format((c.subsection ? c.subsection : c.name), (c.block == "P" ? "PM" : c.block), c.teacher)
 
     if (!confirm("Are you ABSOLUTELY sure you would like to remove " + student.student_username + " (" + student.student_id +  ") from " + className + "?")) return;
-    netDelete("/teacher/remove/" + tid, cbs, cbf);
+    netDelete("/teacher/remove/" + tid, undefined, cbs, cbf);
 
 }
 
