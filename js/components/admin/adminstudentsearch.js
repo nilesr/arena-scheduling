@@ -64,12 +64,12 @@ var filterStudents = function filterStudents(cs, i) {
 		return true;
 	})
 	cs.sort((a, b) => {
-		var an = a.student_username
-		var bn = b.student_username
+		var an = (a.student_username ? a.student_username : 'TBD') 
+		var bn = (b.student_username ? b.student_username : 'TBD') 
 		var c1 = an.localeCompare(bn)
         if (c1 != 0) return c1;
         
-		return a.student_id.localeCompare(b.student_id)
+		return a.student_id.toString().localeCompare(b.toString().student_id)
 	})
 	return cs
 }
