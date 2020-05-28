@@ -286,7 +286,7 @@ mark {
 .schedule-classname {
     font-weight: 300;
 }
-.schedule-killbtn {
+.schedule-killbtn, .alert-close {
     position: absolute;
     top: 3px;
     right: 3px;
@@ -297,6 +297,8 @@ mark {
     border-radius: 11px;
     background-color: rgba(255, 0, 0, 0.5);
     border: none;
+    cursor: pointer;
+    color: black;
 }
 .schedule-classroom {
     position: absolute;
@@ -385,4 +387,28 @@ mark {
     margin-left: 5px;
     padding: 0 10px;
     color: black;
+}
+
+.alert {
+  border-radius: 10px;
+  background-color: var(--variant-bg);
+  color: var(--variant-text);
+  border: 1px solid var(--variant-border);
+  padding: 10px;
+  position: relative;
+}
+/* stolen from bootstrap */
+.alert-warning {
+  --variant-bg: #fff3cd;
+  --variant-text: #856404;
+  --variant-border: #ffeeba;
+}
+.alert-danger {
+  --variant-bg: #f8d7da;
+  --variant-text: #721c24;
+  --variant-border: #f4c5cb;
+}
+
+.alert-close {
+  padding: 0 6.5px;
 }

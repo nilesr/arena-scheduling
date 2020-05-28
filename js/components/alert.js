@@ -3,10 +3,11 @@ function Alert(props) {
   
     if (show) {
       return (
-        <ReactBootstrap.Alert variant={props.variant} onClose={() => setShow(false)} dismissible>
-          {props.heading ? <ReactBootstrap.Alert.Heading>{props.heading}</ReactBootstrap.Alert.Heading> : ''}
+        <div className={"alert alert-" + props.variant}>
+          <div className="alert-close" onClick={() => setShow(false)}>&times;</div>
+          {props.heading ? <div>{props.heading}</div> : null}
           {props.body}
-        </ReactBootstrap.Alert>
+        </div>
       );
     }
     return null;
