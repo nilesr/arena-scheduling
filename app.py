@@ -168,7 +168,7 @@ def put_ticket(db, user):
 		abort(500, "Database invariant violated")
 
 	# Check that the user isn't already taking that class at a different block
-	r = query(db, "select block from student_schedules where class_name = ? and teacher = ?", name, teacher)
+	r = query(db, "select block from student_schedules where class_name = ? and teacher = ? and student_id = ?", name, teacher, user)
 	if len(r) > 0:
 		abort(400, "You are already in that class at another block: " + r[0].block)
 
