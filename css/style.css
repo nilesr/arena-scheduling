@@ -386,3 +386,7 @@ mark {
     padding: 0 10px;
     color: black;
 }
+
+a:hover {
+    text-decoration: none;
+}

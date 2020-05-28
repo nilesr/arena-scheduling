@@ -6,7 +6,7 @@ class StudentRow extends React.Component {
     render() {
         let c = this.props.student
         return <tr key={c.student_id}>
-            <td>{c.student_username}</td>
+            <td>{c.student_username ? c.student_username : "TBD"}</td>
             <td>{c.student_id}</td>
             <td><a className="button button-outline"  key={"button-student-" + (c.student_id)} onClick={() => this.props.setCurStudent(c) }>View Schedule</a></td>
         </tr>
@@ -57,7 +57,7 @@ var filterStudents = function filterStudents(cs, i) {
 
 	i = replaceAll(i, "/", " ").toLowerCase().split(" ")
 	cs = cs.filter(c => {
-		var ck = replaceAll((c.student_username + c.student_id).toLowerCase(), "/", " ")
+		var ck = replaceAll(((c.student_username ? c.student_username : '') + c.student_id).toLowerCase(), "/", " ")
 		for (let j = 0; j < i.length; j++) {
 			if (ck.indexOf(i[j]) < 0) return false;
 		}
@@ -132,6 +132,7 @@ class AdminStudentSearch extends React.Component {
 			<input className="search" style={{marginTop: '1%', marginBottom: '2%'}} placeholder="Search for a student" value={this.state.i} onChange={(evt) => this.setState({i: evt.target.value})} />
 			</div>
             <div className="linebreak"></div>
+            <Alert variant="warning" body="The names of students who have never logged in will show up as 'TBD'" />
             <div style={{overflowY: 'auto'}}>
                 {this.state.loading
                     ? "Loading..."
