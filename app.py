@@ -215,7 +215,10 @@ def get_student_schedule(db, user):
 	if not student_id:
 		abort(400, "Invalid Query")
 
-	return {"schedule": query(db, "select * from student_schedules where student_id = ?", student_id, symbolize_names=False)}
+	return {
+		"schedule": query(db, "select * from student_schedules where student_id = ?", student_id, symbolize_names=False),
+		"waitlist": query(db, "select * from waitlist where student_id = ?", student_id, symbolize_names=False),
+	}
 
 @delete("/teacher/waitlist")
 @require_admin

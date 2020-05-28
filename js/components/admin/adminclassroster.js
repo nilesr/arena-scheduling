@@ -184,12 +184,13 @@ class AdminClassRoster extends React.Component {
     }
 
     componentDidUpdate() {
-        if ( (this.state.curClass == null && this.props.curClass != null)
-            || this.state.curClass.block != this.props.curClass.block
-            || this.state.curClass.name != this.props.curClass.name
-            || this.state.curClass.subsection != this.props.curClass.subsection
-            || this.state.curClass.teacher != this.props.curClass.teacher
-            || this.props.stale != this.state.stale
+        if (this.props.curClass != null
+            && ((this.state.curClass == null && this.props.curClass != null)
+                || this.state.curClass.block != this.props.curClass.block
+                || this.state.curClass.name != this.props.curClass.name
+                || this.state.curClass.subsection != this.props.curClass.subsection
+                || this.state.curClass.teacher != this.props.curClass.teacher
+                || this.props.stale != this.state.stale)
             ) {
 
             if (this.props.stale != this.state.stale) {

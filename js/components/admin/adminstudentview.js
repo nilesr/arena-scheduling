@@ -29,6 +29,7 @@ var AdminScheduleTable = (props) => {
 
     return <div>
             <div className="class-roster-title">{props.student.student_username} ({props.student.student_id})</div>
+            {props.wl > 0 ? <div className="class-roster-title" style={{color: "red"}}>Waitlisted for {props.wl} class{props.wl > 1 ? "es" : ""}</div> : null}
             <table style={{margin: "10px 2.5%", width: "95%"}}>
                <thead>
                        <tr>
@@ -47,6 +48,57 @@ var AdminScheduleTable = (props) => {
         </div>;
 }
 
+class AdminStudentViewWaitlistTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.removeWaitlist = this.removeWaitlist.bind(this)
+    }
+    removeWaitlist(c) {
+        let className = "{0} ({1} block) - {2}".format((c.subsection ? c.subsection : c.name), (c.block == "P" ? "PM" : c.block), c.teacher)
+        if (!confirm("Are you ABSOLUTELY sure you would like to remove " + this.props.student_username + " (" + c.student_id +  ") from the waitlist for " + className + "?")) return;
+        var args = {
+            block: c.block,
+            name: c.name,
+            subsection: c.subsection,
+            teacher: c.teacher,
+            student_id: c.student_id,
+        }
+	    netDelete("/teacher/waitlist", args, this.props.onChange, (e) => { window.alert("There was an error deleting your ticket: " + e); })
+    }
+
+    render() {
+        
+        var body = this.props.waitlist.map((w) => 
+                <tr key={w.name + "-" + w.subsection + "-" + w.teacher + "-" + w.block}>
+                    <td>{w.subsection == "" ? w.name : w.subsection}</td>
+                    <td>{w.block}</td>
+                    <td>{w.teacher}</td>
+                    <td>{w.note}</td>
+                    <td><a className="button button-outline" onClick={() => this.removeWaitlist(w) }>Remove</a></td>
+                </tr>)
+        
+        return (
+        [
+        <div key="table" style={{overflowY: 'auto'}}>
+            <table style={{margin: "10px 2.5%", width: "95%"}}>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Block</th>
+                    <th>Teacher</th>
+                    <th>Waitlist Reason</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                {body}
+            </tbody>
+	        </table>
+        </div>])
+    }
+}
+
+
 class Student extends React.Component {
 
     constructor(props) {
@@ -55,7 +107,10 @@ class Student extends React.Component {
 
     render() {
         return <div style={{overflowY: 'auto'}}>
-            <AdminScheduleTable classes={this.props.classes} schedule={this.props.schedule} student={this.props.student} onChange={this.props.onChange} stale={this.props.stale}  />
+            <AdminScheduleTable classes={this.props.classes} schedule={this.props.schedule} student={this.props.student} onChange={this.props.onChange} wl={this.props.waitlist.length} />
+            {this.props.waitlist.length > 0 
+                ? <AdminStudentViewWaitlistTable waitlist={this.props.waitlist} schedule={this.props.schedule} student={this.props.student} onChange={this.props.onChange} />
+                : null}
         </div>
     }
 }
@@ -98,7 +153,7 @@ class AdminStudentView extends React.Component {
                 return
             }
 
-            if (t['schedule'] == undefined) {
+            if (t.schedule == undefined) {
                 this.setState({
                     ...this.state,
                     loading: false,
@@ -107,12 +162,13 @@ class AdminStudentView extends React.Component {
                 return
             }
             
-            t['schedule'].sort((a, b) => a.block.localeCompare(b.block));
+            t.schedule.sort((a, b) => a.block.localeCompare(b.block));
             this.setState({
                 ...this.state,
                 loading: false,
                 errMsg: null,
-                schedule: t['schedule']
+                schedule: t.schedule,
+                waitlist: t.waitlist,
             })
         },
         (e) => {
@@ -157,7 +213,7 @@ class AdminStudentView extends React.Component {
                         ? 'Loading...'
                         : this.state.errMsg
                             ? this.state.errMsg
-                            : <Student classes={this.props.classes} student={this.state.curStudent} schedule={this.state.schedule} onChange={this.props.onChange} stale={this.props.stale} />
+                            : <Student classes={this.props.classes} student={this.state.curStudent} schedule={this.state.schedule} onChange={this.props.onChange} waitlist={this.state.waitlist} />
                     : "Please select a student from the list"}
             </ExpandoScroll>
         </div>)
