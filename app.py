@@ -43,6 +43,63 @@ def require_admin(fn):
 		return fn(db, user, *args, **kwargs)
 	return newfn
 
+
+def clear_block(db, block, student_id):
+	r = query(db, "select * from student_schedules where block = ? and student_id = ?", block, student_id)
+
+	if len(r) > 0:
+		query(db, "delete from student_schedules where block = ? and student_id = ?", block, student_id)
+		return r[0]
+
+	return None
+
+def get_class(db, block, name, subsection, teacher):
+	
+	c = query(db, "select * from classes where block = ? and name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher)
+	
+	if len(c) > 0:
+		return c[0]
+	
+	return None
+
+def fix_waitlist(db, block, name, subsection, teacher):
+
+	c = get_class(db, block, name, subsection, teacher)
+	if not c:
+		return None
+
+	enrolled = query(db, "select COUNT(*) from student_schedules where block = ? and class_name = ? and subsection = ? and teacher = ?",
+		c['block'], c['name'], c['subsection'], c['teacher'])[0]['COUNT___']
+
+
+	# check if we have cap space
+	if enrolled < c['cap']:
+		
+		# get the waitlist
+		waitlist = query(db, "select * from waitlist where block = ? and name = ? and subsection = ? and teacher = ? LIMIT 1",
+			c['block'], c['name'], c['subsection'], c['teacher'])
+
+		# migrate one student
+		if len(waitlist) > 0:
+			student = waitlist[0]
+			print('Migrating: ' + str(student))
+
+			removed_class = clear_block(db, c['block'], student['student_id'])
+			
+			# insert the student into the class
+			query(db, "insert into student_schedules (student_id, block, class_name, subsection, teacher) values (?, ?, ?, ?, ?)", 
+				student['student_id'], c['block'], c['name'], c['subsection'], c['teacher'])
+
+			# remove the old waitlist request
+			query(db, "delete from waitlist where block = ? and name = ? and subsection = ? and teacher = ? and student_id = ?",
+				c['block'], c['name'], c['subsection'], c['teacher'], student['student_id'])
+
+			# recurse to fix the next class
+			if removed_class is not None:
+				fix_waitlist(db, removed_class['block'], removed_class['class_name'], removed_class['subsection'], removed_class['teacher'])
+		
+
+
 @route("/")
 def index():
 	return static_file("/index.html", root=root)
@@ -132,10 +189,19 @@ def put_ticket(db, user):
 @time_checked
 def delete_ticket(db, user, id):
 	# Check that the ticket exists and is owned by the currently logged in user
-	r = query(db, "select 1 from student_schedules where student_id = ? and id = ?", user, id)
-	if len(r) == 0:
+	r = query(db, "select * from student_schedules where student_id = ? and id = ?", user, id)
+	print(r)
+	if len(r) != 1:
 		abort(400, "Bad ticket ID specified - either the ticket does not exist, or you don't own it")
-	commit(db, "delete from student_schedules where student_id = ? and id = ?", user, id)
+	
+
+	query(db, "delete from student_schedules where student_id = ? and id = ?", user, id)
+
+	ticket = r[0]
+	fix_waitlist(db, ticket['block'], ticket['class_name'], ticket['subsection'], ticket['teacher'])
+
+	db.commit()
+
 	return {}
 
 @put("/waitlist")
@@ -163,7 +229,13 @@ def waitlist(db, user):
 	if len(note) < 30:
 		abort(400, "Your note must be longer (minimum 30 characters)")
 
-	row = commit(db, "insert into waitlist (student_id, block, name, subsection, teacher, note) values (?, ?, ?, ?, ?, ?)", user, block, name, subsection, teacher, note)
+
+	# TODO: prevent duplicate waitlist entries
+
+	row = query(db, "insert into waitlist (student_id, block, name, subsection, teacher, note) values (?, ?, ?, ?, ?, ?)", user, block, name, subsection, teacher, note)
+	fix_waitlist(db, block, name, subsection, teacher)
+	db.commit()
+
 	return {"waitlist": row}
 
 @delete("/waitlist")
@@ -216,10 +288,16 @@ def get_class_roster(db, user):
 @require_admin
 def teacher_delete_ticket(db, user, id):
 	# Check that the ticket exists and is owned by the currently logged in user
-	r = query(db, "select 1 from student_schedules where id = ?", id)
+	r = query(db, "select * from student_schedules where id = ?", id)
 	if len(r) == 0:
 		abort(400, "Bad ticket ID specified - either the ticket does not exist")
-	commit(db, "delete from student_schedules where id = ?", id)
+		
+	query(db, "delete from student_schedules where id = ?", id)
+
+	ticket = r[0]
+	fix_waitlist(db, ticket['block'], ticket['class_name'], ticket['subsection'], ticket['teacher'])
+
+	db.commit()
 	return {}
 
 @route("/teacher/allstudents")

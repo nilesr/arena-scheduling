@@ -34,7 +34,7 @@ var WaitlistsWarning = function WaitlistsWarning(props) {
 					{props.waitlists.map((w, i) => {
 						return <tr key={i}>
 							<td>{w.subsection == "" ? w.name : w.subsection}</td>
-							<td>{w.block}</td>
+							<td>{w.block == 'P' ? 'PM' : w.block}</td>
 							<td>{w.teacher}</td>
 							<td>{w.note}</td>
 							<td><a className="button" onClick={() => killWaitlist(w, props.onChange)}>Delete</a></td>
