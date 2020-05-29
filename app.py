@@ -43,26 +43,6 @@ def require_admin(fn):
 		return fn(db, user, *args, **kwargs)
 	return newfn
 
-
-def clear_block(db, block, student_id):
-	r = query(db, "select * from student_schedules where block = ? and student_id = ?", block, student_id)
-
-	if len(r) > 0:
-		query(db, "delete from student_schedules where block = ? and student_id = ?", block, student_id)
-		return r[0]
-
-	return None
-
-def get_class(db, block, name, subsection, teacher):
-	
-	c = query(db, "select * from classes where block = ? and name = ? and subsection = ? and teacher = ?", block, name, subsection, teacher)
-	
-	if len(c) > 0:
-		return c[0]
-	
-	return None
-
-
 @route("/")
 def index():
 	return static_file("/index.html", root=root)
