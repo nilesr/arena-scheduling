@@ -26,8 +26,6 @@ def commit(db, q, *args, symbolize_names =  True):
 	c.execute(q, args) # no splat!
 	r = c.lastrowid
 	db.commit()
-	print(q, args)
-	print(r)
 	return r
 
 def get_db():
