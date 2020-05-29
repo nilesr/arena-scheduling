@@ -1,6 +1,5 @@
 var catnames = [
 	"English",
-	"Writing",
 	"Social Studies",
 	"Math",
 	"Science",
@@ -8,7 +7,8 @@ var catnames = [
 	"Spanish",
 	"German",
 	"Latin",
-	"Chinese, Arabic, and ASL",
+	"Chinese and Arabic",
+	"American Sign Language",
 	"Health/PE",
 	"Choral Music and Music Theory",
 	"Instrumental Music and Song Writing",
