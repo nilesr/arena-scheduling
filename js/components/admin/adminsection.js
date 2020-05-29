@@ -11,7 +11,7 @@ var AdminSectionList = (props) => {
 		</thead>
 		<tbody>
 			{props.classes.map(c => {
-				var filled = c.remaining_slots <= 0;
+				var filled = c.remaining_slots <= 0 || (c.locked == 1);
 				return <tr key={c.name + c.subsection + c.teacher + c.block}>
 					<td><ClassName cls={c} /></td>
                     <td>{c.teacher}</td>
@@ -19,6 +19,7 @@ var AdminSectionList = (props) => {
 					<td className={filled ? "red" : (c.remaining_slots <= 5 ? "gold" : "")} style={{fontWeight: "bold"}}>
 						({c.cap - c.remaining_slots}/{c.cap})
 						{c.waitlist > 0 ? <div className="red">{c.waitlist} waitlisted</div> : null}
+						{c.locked == 1 ? <i className="fa fa-lock" style={{marginLeft: '5px'}}></i> : null}
 					</td>
                     <td className="center">
 						<a className="button button-outline" key={"button-" + (c.name + c.subsection + c.teacher + c.block)} onClick={() => props.setCurClass(c) }>View Class Roster</a>

@@ -63,6 +63,7 @@ class AdminClasses extends React.Component {
 			<input className="search" style={{marginTop: '1%', marginBottom: '2%'}} placeholder="Search for classes" value={this.state.i} onChange={(evt) => this.setState({i: evt.target.value})} />
 			</div>
             <div className="linebreak"></div>
+            <Alert variant="warning" children="Classes which hit their enrollment cap are locked, even if students are removed from the class and thus there is additional space." />
             <div style={{overflowY: 'auto'}}>
             {this.state.i == ""
 				? catkeys.map((cat) => {

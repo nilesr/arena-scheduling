@@ -36,14 +36,14 @@ var SectionList = (props) => {
 		<tbody>
 			{props.classes.map(c => {
 				var used = props.used_blocks.indexOf(c.block) >= 0
-				var filled = c.remaining_slots <= 0;
+				var filled = c.remaining_slots <= 0 || c.locked == 1;
 				var in_a_section = props.tickets.filter(t => t.class_name == c.name && t.teacher == c.teacher && t.subsection == c.subsection).length > 0;
 				var in_this_section = props.tickets.filter(t => t.class_name == c.name && t.teacher == c.teacher && t.subsection == c.subsection && t.block == c.block).length > 0;
 				var allowed = !used && !filled && !in_a_section;
 				return <tr key={c.name + c.subsection + c.teacher + c.block}>
 					<td><ClassName cls={c} /></td>
 					<td>{c.block == "P" ? "PM" : c.block}</td>
-					<td className={filled ? "red" : (c.remaining_slots <= 5 ? "gold" : "")} style={{fontWeight: "bold"}}>{c.remaining_slots}</td>
+					<td className={filled ? "red" : (c.remaining_slots <= 5 ? "gold" : "")} style={{fontWeight: "bold"}}>{(c.locked == 1) ? 0 : c.remaining_slots}</td>
 					<td className="center">
 						<a className="button button-outline" disabled={allowed ? null : "disabled"} onClick={() => schedule(c, props.onChange)}>
 							{

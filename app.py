@@ -166,7 +166,7 @@ def put_ticket(db, user):
 		abort(400, "That class doesn't exist")
 	if len(r) > 1:
 		abort(500, "Database invariant violated")
-
+	
 	# Check that the user isn't already taking that class at a different block
 	r = query(db, "select block from student_schedules where class_name = ? and teacher = ? and student_id = ?", name, teacher, user)
 	if len(r) > 0:
@@ -178,11 +178,22 @@ def put_ticket(db, user):
 		abort(400, "You are already in the maximum number of classes")
 
 	# Check if adding the block would exceed the limit for the class
-	r = query(db, "select remaining_slots from classes_avail where name = ? and teacher = ? and block = ?", name, teacher, block)[0].remaining_slots
-	if r <= 0:
-		abort(400, "That class is full - it has {} remaining slots".format(r))
+	r = query(db, "select remaining_slots, locked, waitlist from classes_avail where name = ? and teacher = ? and block = ?", name, teacher, block)[0]
+	
+	if r.remaining_slots <= 0:
+		abort(400, "That class is full. Please use the waitlist.")
+	
+	if r.locked == 1:
+		abort(400, "That class is closed to enrollment. It has {} remaining slot{} which will be taken from the waitlist".format(r.remaining_slots, '' if r.remaining_slots == 1 else 's'))
 
-	row = commit(db, "insert into student_schedules (student_id, block, class_name, subsection, teacher) values (?, ?, ?, ?, ?)", user, block, name, subsection, teacher)
+	row = query(db, "insert into student_schedules (student_id, block, class_name, subsection, teacher) values (?, ?, ?, ?, ?)", user, block, name, subsection, teacher)
+	
+	# We're now out of slots
+	if r.remaining_slots == 1:
+		query(db, "update classes set locked = 1 where name = ? and teacher = ? and block = ?", name, teacher, block)
+	
+	db.commit()
+
 	return {"ticket": row}
 
 @delete("/tickets/<id>")
@@ -196,8 +207,8 @@ def delete_ticket(db, user, id):
 	
 
 	query(db, "delete from student_schedules where student_id = ? and id = ?", user, id)
-	ticket = r[0]
-	fix_waitlist(db, ticket['block'], ticket['class_name'], ticket['subsection'], ticket['teacher'])
+	#ticket = r[0]
+	#fix_waitlist(db, ticket['block'], ticket['class_name'], ticket['subsection'], ticket['teacher'])
 	db.commit()
 
 	return {}
@@ -231,7 +242,7 @@ def waitlist(db, user):
 	# TODO: prevent duplicate waitlist entries
 
 	row = query(db, "insert into waitlist (student_id, block, name, subsection, teacher, note) values (?, ?, ?, ?, ?, ?)", user, block, name, subsection, teacher, note)
-	fix_waitlist(db, block, name, subsection, teacher)
+	#fix_waitlist(db, block, name, subsection, teacher)
 	db.commit()
 
 	return {"waitlist": row}
@@ -292,8 +303,8 @@ def teacher_delete_ticket(db, user, id):
 		
 	query(db, "delete from student_schedules where id = ?", id)
 
-	ticket = r[0]
-	fix_waitlist(db, ticket['block'], ticket['class_name'], ticket['subsection'], ticket['teacher'])
+	#ticket = r[0]
+	#fix_waitlist(db, ticket['block'], ticket['class_name'], ticket['subsection'], ticket['teacher'])
 
 	db.commit()
 	return {}
