@@ -60,13 +60,7 @@ class Classes extends React.Component {
 			{this.state.i == ""
 				? catkeys.map((cat) => {
 						return <div key={cat}>
-							<h3 id={"cat-" + cat}>
-							{
-								this.props.cat == cat
-								? <mark>{catnames[cat]}</mark>
-								: catnames[cat]
-							}
-							</h3>
+							<h3>{catnames[cat]}</h3>
 							{renderCat(cats[cat], this.props.onChange, used_blocks, this.props.tickets)}
 						</div>;
 					})
@@ -77,12 +71,6 @@ class Classes extends React.Component {
 					/>
 			}
 		</div>;
-	}
-	componentDidMount() {
-		if (this.props.cat) {
-			var ch = document.getElementById("cat-" + this.props.cat);
-			window.scrollTo(0, ch.offsetTop)
-		}
 	}
 }
 window.Classes = Classes;
