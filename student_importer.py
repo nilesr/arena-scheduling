@@ -5,7 +5,7 @@ from db import get_db, init_db, query
 init_db()
 db = get_db()
 
-base_time = 1592229600
+base_time = 1591624800
 tdeltasec = 60 * 3
 
 grades = {8: [], 9: [], 10: [], 11: []}
