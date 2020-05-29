@@ -85,6 +85,9 @@ def init_db():
 		select (case when (select 1 from classes where block = NEW.block and name = NEW.class_name and subsection = NEW.subsection and teacher = NEW.teacher) is null
 			then raise(fail, "Attempt to add a row to student_schedules that does not reference a row in classes")
 			else 1 end);
+		select (case when (select 1 from classes where block = NEW.block and name = NEW.class_name and subsection = NEW.subsection and teacher = NEW.teacher AND not locked) is null
+			then raise(fail, "Attempt to add a row to student_schedules that references a locked class")
+			else 1 end);
 		select (case when (select cap from classes where block = NEW.block and name = NEW.class_name and teacher = NEW.teacher limit 1) <= (select count(*) from student_schedules where block = NEW.block and class_name = NEW.class_name and teacher = NEW.teacher)
 			then raise(fail, "Adding a new row would exceed the cap for the class")
 			else 1 end);
