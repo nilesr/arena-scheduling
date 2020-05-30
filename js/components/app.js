@@ -11,10 +11,11 @@ class App extends React.Component {
 			time_left: -1,
 			num: -1,
 			waitlists: false,
+			refresh_sec: 45,
 		};
 	}
-	checkTickets() {
-		this.setState(s => {return {...s, loading: true}; })
+	checkTickets(loading) {
+		this.setState(s => {return {...s, loading: loading}; })
 		get("/tickets", {},
 			(t) => this.setState(s => { return {...s, loading: false, loggedIn: true,
 													  tickets: t.tickets, name: t.name, time_left: t.time_left,
@@ -31,17 +32,32 @@ class App extends React.Component {
 	componentDidMount() {
 		this.checkTickets();
 		this.fetchClasses()
+		setInterval((function() {
+			if (this.state.refresh_sec <= 0) {
+				this.refresh(false);
+			} else {
+				this.setState(s => { return {...s, refresh_sec: s.refresh_sec - 1}; })
+			}
+		}).bind(this), 1000)
+	}
+	refresh(loading) {
+		this.setState(s => { return {...s, refresh_sec: 45}; })
+		if (this.state.loggedIn) {
+			this.checkTickets(loading);
+			this.fetchClasses();
+		}
 	}
 	render() {
 		return (
-			<main className="wrapper">
+			[
+			<main key={0} className="wrapper">
 				<nav className="navigation">
 					<section className="container">
 						<span className="navigation-title">Arena Scheduling</span>
 						{this.state.loggedIn ? 
 							<ul className="navigation-list float-right" style={{marginBottom: 0}}>
 								<li className="navigation-item">Welcome {this.state.name}</li>
-								{this.state.waitlists.length > 0 ? <WaitlistsWarning waitlists={this.state.waitlists} onChange={() => { this.checkTickets(); this.fetchClasses(); }} /> : null}
+								{this.state.waitlists.length > 0 ? <WaitlistsWarning waitlists={this.state.waitlists} onChange={() => { this.checkTickets(true); this.fetchClasses(); }} /> : null}
 								<Timecover time_left={this.state.time_left} name={this.state.name} num={this.state.num} />
 								<Logout />
 							</ul>
@@ -53,10 +69,12 @@ class App extends React.Component {
 						? (this.state.tickets === false || this.state.classes === false)
 							? "Loading..."
 							: this.state.isAdmin
-								? <AdminView classes={this.state.classes} onChange={() => { this.checkTickets(); this.fetchClasses(); }}  />
-								: <Tabs tickets={this.state.tickets} classes={this.state.classes} onChange={() => { this.checkTickets(); this.fetchClasses(); }} />
+								? <AdminView classes={this.state.classes} onChange={() => { this.checkTickets(true); this.fetchClasses(); }}  />
+								: <Tabs tickets={this.state.tickets} classes={this.state.classes} onChange={() => { this.checkTickets(true); this.fetchClasses(); }} />
 						: <Login />}
-			</main>
+			</main>,
+			(this.state.loggedIn ? <div key={1} id="refresh" onClick={() => this.refresh(true)}>Refreshing in {this.state.refresh_sec} second{this.state.refresh_sec == 1 ? "" : "s"}...</div> : null),
+			]
 		)
 	}
 };
