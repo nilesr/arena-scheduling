@@ -346,6 +346,19 @@ def export(db, user):
 	response.set_header("content-disposition", "attachment; filename=\"export.csv\"")
 	return f.read()
 
+@route("/teacher/export_comments")
+@require_admin
+def export_comments(db, user):
+	f = io.StringIO()
+	c = csv.DictWriter(f, fieldnames=["student_id", "student_username", "subject", "message"])
+	q = query(db, "select c.student_id, s.student_username, c.subject, c.message from comments c join students s on c.student_id = s.student_id", symbolize_names=False);
+	c.writeheader()
+	for r in q:
+		c.writerow(r)
+	f.seek(0)
+	response.content_type = 'application/csv'
+	response.set_header("content-disposition", "attachment; filename=\"export_comments.csv\"")
+	return f.read()
 
 @route("/<filename:path>")
 def static(filename):
