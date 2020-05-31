@@ -9,7 +9,7 @@ var Tabs = (props) => {
 	var tabs = [
 		["Find Classes", <div><Classes tickets={props.tickets} classes={props.classes} onChange={props.onChange} /><SmallSchedule onChange={props.onChange} tickets={props.tickets} /></div>],
 		["Registered Classes", wrapSection(<Schedule tickets={props.tickets} classes={props.classes} onChange={props.onChange} />)],
-		["Comments", <div><Comments /></div>]
+		["Comments", <div><Comments comments={props.comments} onChange={props.onChange} /></div>]
 	]
 	return <div>
 		<section className="container tabs-container">

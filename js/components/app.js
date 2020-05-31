@@ -11,6 +11,7 @@ class App extends React.Component {
 			time_left: -1,
 			num: -1,
 			waitlists: false,
+			comments: false,
 			refresh_sec: 45,
 		};
 	}
@@ -19,7 +20,7 @@ class App extends React.Component {
 		get("/tickets", {},
 			(t) => this.setState(s => { return {...s, loading: false, loggedIn: true,
 													  tickets: t.tickets, name: t.name, time_left: t.time_left,
-													  isAdmin: t.admin, num: t.num, waitlists: t.waitlists}; }),
+													  isAdmin: t.admin, num: t.num, waitlists: t.waitlists, comments: t.comments}; }),
 			(e) => this.setState(s => { return {...s, loading: false, loggedIn: false} }),
 		)
 	}
@@ -70,7 +71,7 @@ class App extends React.Component {
 							? "Loading..."
 							: this.state.isAdmin
 								? <AdminView classes={this.state.classes} onChange={() => { this.checkTickets(true); this.fetchClasses(); }}  />
-								: <Tabs tickets={this.state.tickets} classes={this.state.classes} onChange={() => { this.checkTickets(true); this.fetchClasses(); }} />
+								: <Tabs tickets={this.state.tickets} classes={this.state.classes} comments={this.state.comments} onChange={() => { this.checkTickets(true); this.fetchClasses(); }} />
 						: <Login />}
 			</main>,
 			(this.state.loggedIn ? <div key={1} id="refresh" onClick={() => this.refresh(true)}>Refreshing in {this.state.refresh_sec} second{this.state.refresh_sec == 1 ? "" : "s"}...</div> : null),

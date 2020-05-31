@@ -77,6 +77,7 @@ def get_tickets(db, user):
 	time_allowed_in = student.time_allowed_in
 	num = student.num
 	waitlists = query(db, "select * from waitlist where student_id = ?", user, symbolize_names=False)
+	comments = query(db, "select * from comments where student_id = ?", user, symbolize_names=False)
 	return {
 		"tickets": tickets,
 		"name": name,
@@ -84,6 +85,7 @@ def get_tickets(db, user):
 		"time_left": time_allowed_in - time.time(),
 		"num": num,
 		"waitlists": waitlists,
+		"comments": comments,
 	}
 
 @put("/tickets")
@@ -165,7 +167,11 @@ def waitlist(db, user):
 	if len(message) < 30:
 		abort(400, "Please write a message of at least 30 characters")
 
-	row = query(db, "insert into comments (student_id, subject, message) values (?, ?, ?)", user, subject, message)
+	n = query(db, "select count(*) as c from comments where student_id = ?", user)[0].c
+	if n > 0:
+		query(db, "update comments set subject = ?, message = ? where student_id = ?", subject, message, user)
+	else:
+		query(db, "insert into comments (student_id, subject, message) values (?, ?, ?)", user, subject, message)
 	db.commit()
 
 	return {'success': True}

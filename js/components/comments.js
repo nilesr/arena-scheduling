@@ -14,10 +14,11 @@ class Comments extends React.Component {
 
     constructor(props) {
         super(props)
+        var p = props.comments.length > 0 ? props.comments[0] : {subject: "", message: ""}
 
         this.state = {
-            subject: "",
-            message: "",
+            subject: p.subject,
+            message: p.message,
             sending: false,
             errMsg: null,
             succMsg: null
@@ -45,13 +46,12 @@ class Comments extends React.Component {
         }, () => {
             if (this.state.subject.length == 0) {
                 this.setState({...this.state, errMsg: 'Please add a subject'})
-    
-                return
+                return;
             }
             
             if (this.state.message.length == 0) {
                 this.setState({...this.state, errMsg: 'Please add a message'})
-                return
+                return;
             }
     
             this.setState({...this.state, sending: true}, () => {
@@ -64,10 +64,9 @@ class Comments extends React.Component {
                     this.setState({
                         ...this.state,
                         sending: false,
-                        succMsg: 'Comment submitted!',
-                        subject: "",
-                        message: ""
+                        succMsg: 'Comment submitted!'
                     })
+                    this.props.onChange();
 
                 }, (t) => {
                     this.setState({

@@ -135,12 +135,10 @@ def init_db():
 	""")
 	c.execute("""
 	create table if not exists comments (
-		comment_id	int not null,
-		student_id	int not null,
+		student_id	int not null primary key,
 		subject	text not null,
 		message	text not null,
-		foreign key(student_id) references students(student_id),
-		primary key(`comment_id`)
+		foreign key(student_id) references students(student_id)
 	);""")
 	c.execute("""
 	create trigger if not exists waitlist_fk
