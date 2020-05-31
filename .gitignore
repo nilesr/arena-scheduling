@@ -2,4 +2,8 @@ __pycache__
 schedule.db
 schedule.db.sqbpro
 client_secret.txt
-
+node_modules
+lib
+final.js
+final.min.js
+package-lock.json
