@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import csv, sqlite3, sys, random
+random.seed(0x1032547698badcfe) # sleeveless
 sys.path.insert(0, ".")
 from db import get_db, init_db, query
 init_db()
