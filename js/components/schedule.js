@@ -37,6 +37,7 @@ class Schedule extends React.Component {
 		var tickets = this.props.tickets
 		tickets.sort(((a, b) => a.block.localeCompare(b.block)))
 		return <div>
+			<BioChemAlert tickets={tickets} />
 			<div className="schedule-cb">
 				<div>
 					<input id="schedule-cb-colors" type="checkbox" checked={this.state.colors} onChange={() => this.setState(s => {return {...s, colors: !s.colors}})} />
