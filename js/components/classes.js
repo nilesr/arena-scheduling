@@ -55,7 +55,7 @@ class Classes extends React.Component {
 		var used_blocks = this.props.tickets.map(t => t.block);
 		var cats = groupBy(this.props.classes, e => e.category)
 		var catkeys = Object.keys(cats)
-		return <div className="classes">
+		return <div className="classes" style={{marginBottom: '2%'}}>
 			<input className="search" placeholder="Search for classes" value={this.state.i} onChange={(evt) => this.setState({i: evt.target.value})} />
 			{this.state.i == ""
 				? catkeys.map((cat) => {
