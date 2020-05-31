@@ -14,7 +14,7 @@ var WaitlistsWarning = function WaitlistsWarning(props) {
 	var [open, setOpen] = React.useState(false);
 	return <li className="navigation-item">
 		<Alert variant="danger" static={true}>
-			<div style={{cursor: "pointer"}} onClick={() => setOpen(true)}>
+			<div style={{cursor: "pointer", lineHeight: "1em"}} onClick={() => setOpen(true)}>
 				<i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
 				Waitlisted for {n} {n  == 1 ? "class" : "classes"}
 			</div>
