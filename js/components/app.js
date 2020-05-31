@@ -74,7 +74,7 @@ class App extends React.Component {
 								: <Tabs tickets={this.state.tickets} classes={this.state.classes} comments={this.state.comments} onChange={() => { this.checkTickets(true); this.fetchClasses(); }} />
 						: <Login />}
 			</main>,
-			(this.state.loggedIn ? <div key={1} id="refresh" onClick={() => this.refresh(true)}>Refreshing in {this.state.refresh_sec} second{this.state.refresh_sec == 1 ? "" : "s"}...</div> : null),
+			(this.state.loggedIn ? <div key={1} id="refresh" onClick={() => this.refresh(true)}>Arena Scheduling by Niles Rogoff, Ethan Sattler, 2020. Refreshing classes in {this.state.refresh_sec} second{this.state.refresh_sec == 1 ? "" : "s"}...</div> : null),
 			]
 		)
 	}

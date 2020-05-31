@@ -3,4 +3,4 @@ var killTicket = function killTicket(id, oc) {
 	netDelete("/tickets/" + id, undefined, oc, (e) => { window.alert("There was an error deleting your ticket: " + e); })
 }
 
-
+window.killTicket = killTicket;
