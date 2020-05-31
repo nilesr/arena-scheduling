@@ -134,6 +134,15 @@ def init_db():
 	);
 	""")
 	c.execute("""
+	create table if not exists comments (
+		comment_id	int not null,
+		student_id	int not null,
+		subject	text not null,
+		message	text not null,
+		foreign key(student_id) references students(student_id),
+		primary key(`comment_id`)
+	);""")
+	c.execute("""
 	create trigger if not exists waitlist_fk
 	before insert on student_schedules
 	begin
@@ -142,6 +151,7 @@ def init_db():
 			else 1 end);
 	end;
 	""")
+	
 	if len(c.execute("select 1 from students where student_id = ?", [941590]).fetchall()) == 0:
 		c.execute("insert into students (student_id, student_username, time_allowed_in) values (?, ?, ?)", [941590, "Niles Rogoff", 0])
 	db.commit()

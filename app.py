@@ -152,6 +152,25 @@ def delete_ticket(db, user, id):
 
 	return {}
 
+
+@put("/comment")
+@time_checked
+def waitlist(db, user):
+
+	subject = request.forms.get("subject")
+	message = request.forms.get("message")
+
+	if not subject or not message:
+		abort(400, "Please add a subject and a message")
+
+	if len(message) < 30:
+		abort(400, "Please write a message of at least 30 characters")
+
+	row = query(db, "insert into comments (student_id, subject, message) values (?, ?, ?)", user, subject, message)
+	db.commit()
+
+	return {'success': True}
+
 @put("/waitlist")
 @time_checked
 def waitlist(db, user):

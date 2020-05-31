@@ -394,7 +394,7 @@ mark {
   position: relative;
   margin-bottom: 1%;
 }
-/* stolen from bootstrap */
+
 .alert-warning {
   --variant-bg: #fff3cd;
   --variant-text: #856404;
@@ -404,6 +404,17 @@ mark {
   --variant-bg: #f8d7da;
   --variant-text: #721c24;
   --variant-border: #f4c5cb;
+}
+.alert-success {
+    --variant-bg: #155724;
+    --variant-bg: #d4edda;
+    --variant-border: #c3e6cb;
+}
+
+.alert-primary {
+    --variant-bg: #004085;
+    --variant-bg:  #cce5ff;
+    --variant-border:#b8daff;
 }
 
 .alert-close, .modal-close {
