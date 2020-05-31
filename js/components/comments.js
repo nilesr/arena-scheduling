@@ -5,7 +5,7 @@ class Inputs extends React.Component {
 
     render() {
         return <div><input className="search" name="subject" key="search" value={this.props.subject} placeholder="Subject" onChange={this.props.onChange}></input>
-            <textarea key="message" name="message" value={this.props.message} placeholder="A message..." style={{height: '200px'}} onChange={this.props.onChange}></textarea>
+            <textarea key="message" name="message" value={this.props.message} placeholder="I need to take this career center class: ...." style={{minHeight: '200px'}} onChange={this.props.onChange}></textarea>
             <input type="submit" className="submit"></input></div>
     }
 }
@@ -41,45 +41,35 @@ class Comments extends React.Component {
     handleSubmit(e) {
         e.preventDefault()
 
-        this.setState({
-            ...this.state, succMsg: null, errMsg: null, sending: false
+        if (this.state.subject.length == 0) {
+            this.setState({...this.state, errMsg: 'Please add a subject'})
+            return;
+        }
+        
+        if (this.state.message.length == 0) {
+            this.setState({...this.state, errMsg: 'Please add a message'})
+            return;
+        }
+
+        this.setState({...this.state, sending: true})
+        
+        put("/comment", {
+            subject: this.state.subject,
+            message: this.state.message
         }, () => {
-            if (this.state.subject.length == 0) {
-                this.setState({...this.state, errMsg: 'Please add a subject'})
-                return;
-            }
-            
-            if (this.state.message.length == 0) {
-                this.setState({...this.state, errMsg: 'Please add a message'})
-                return;
-            }
-    
-            this.setState({...this.state, sending: true}, () => {
-                
-                put("/comment", {
-                    subject: this.state.subject,
-                    message: this.state.message
-                }, () => {
-
-                    this.setState({
-                        ...this.state,
-                        sending: false,
-                        succMsg: 'Comment submitted!'
-                    })
-                    this.props.onChange();
-
-                }, (t) => {
-                    this.setState({
-                        ...this.state,
-                        sending: false,
-                        errMsg: t
-                    })
-
-                })
+            this.setState({
+                ...this.state,
+                sending: false,
+                succMsg: 'Comment submitted!'
+            })
+            this.props.onChange();
+        }, (t) => {
+            this.setState({
+                ...this.state,
+                sending: false,
+                errMsg: t
             })
         })
-
-        
     }
 
     render() {
