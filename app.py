@@ -133,10 +133,12 @@ def put_ticket(db, user):
 
 	with db:
 		row = query(db, "insert into student_schedules (student_id, block, class_name, subsection, teacher) values (?, ?, ?, ?, ?)", user, block, name, subsection, teacher)
+		print("Student {} added class: {}, {}, {}, {} - assigned ticket id {}".format(user, block, name, subsection, teacher, row))
 		
 		# We're now out of slots
 		if r.remaining_slots == 1:
 			query(db, "update classes set locked = 1 where name = ? and teacher = ? and block = ?", name, teacher, block)
+			print("Class got locked: {}, {}, {}, {}".format(block, name, subsection, teacher))
 
 	return {"ticket": row}
 
@@ -150,6 +152,8 @@ def delete_ticket(db, user, id):
 	
 
 	commit(db, "delete from student_schedules where student_id = ? and id = ?", user, id)
+
+	print("User {} deleted ticket {}".format(user, id))
 
 	return {}
 
@@ -172,6 +176,7 @@ def waitlist(db, user):
 		query(db, "update comments set subject = ?, message = ? where student_id = ?", subject, message, user)
 	else:
 		query(db, "insert into comments (student_id, subject, message) values (?, ?, ?)", user, subject, message)
+	print("user {} comment subject {}, message {}".format(user, subject, message))
 	db.commit()
 
 	return {'success': True}
@@ -202,9 +207,9 @@ def waitlist(db, user):
 		abort(400, "Your note must be longer (minimum 30 characters)")
 
 
-	# TODO: prevent duplicate waitlist entries
 
 	row = query(db, "insert into waitlist (student_id, block, name, subsection, teacher, note) values (?, ?, ?, ?, ?, ?)", user, block, name, subsection, teacher, note)
+	print("user {} waitlisted class {}, {}, {}, {}, note: {}".format(user, block, name, subsection, teacher, note))
 	db.commit()
 
 	return {"waitlist": row}
@@ -228,6 +233,7 @@ def student_delete_waitlist(db, user):
 		abort(400, "Bad waitlist entry specified")
 
 	commit(db, "delete from waitlist where block = ? and name = ? and subsection = ? and teacher = ? and student_id = ?", block, name, subsection, teacher, student_id)
+	print("user {} un-waitlisted class {}, {}, {}, {}, note: {}".format(user, block, name, subsection, teacher, note))
 	return {}
 
 
@@ -264,6 +270,7 @@ def teacher_delete_ticket(db, user, id):
 		abort(400, "Bad ticket ID specified - either the ticket does not exist")
 		
 	query(db, "delete from student_schedules where id = ?", id)
+	print("Teacher {} removed schedule with ticket id {}".format(user, id))
 
 	db.commit()
 	return {}
@@ -306,6 +313,7 @@ def teacher_delete_waitlist(db, user):
 		abort(400, "Bad waitlist entry specified")
 
 	commit(db, "delete from waitlist where block = ? and name = ? and subsection = ? and teacher = ? and student_id = ?", block, name, subsection, teacher, student_id)
+	print("Teacher {} removed student {} waitlist on class {}, {}, {}, {}".format(user, student_id, block, name, subsection, teacher))
 	return {}
 
 @route("/teacher/export")
@@ -344,6 +352,7 @@ def export(db, user):
 	f.seek(0)
 	response.content_type = 'application/csv'
 	response.set_header("content-disposition", "attachment; filename=\"export.csv\"")
+	print("teacher {} export", user)
 	return f.read()
 
 @route("/teacher/export_comments")
@@ -358,6 +367,7 @@ def export_comments(db, user):
 	f.seek(0)
 	response.content_type = 'application/csv'
 	response.set_header("content-disposition", "attachment; filename=\"export_comments.csv\"")
+	print("teacher {} export comments", user)
 	return f.read()
 
 @route("/<filename:path>")
