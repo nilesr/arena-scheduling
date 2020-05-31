@@ -132,7 +132,7 @@ def put_ticket(db, user):
 		abort(400, "That class is closed to enrollment. It has {} remaining slot{} which will be taken from the waitlist".format(r.remaining_slots, '' if r.remaining_slots == 1 else 's'))
 
 	with db:
-		row = query(db, "insert into student_schedules (student_id, block, class_name, subsection, teacher) values (?, ?, ?, ?, ?)", user, block, name, subsection, teacher)
+		row = commit(db, "insert into student_schedules (student_id, block, class_name, subsection, teacher) values (?, ?, ?, ?, ?)", user, block, name, subsection, teacher)
 		print("Student {} added class: {}, {}, {}, {} - assigned ticket id {}".format(user, block, name, subsection, teacher, row))
 		
 		# We're now out of slots
@@ -233,7 +233,7 @@ def student_delete_waitlist(db, user):
 		abort(400, "Bad waitlist entry specified")
 
 	commit(db, "delete from waitlist where block = ? and name = ? and subsection = ? and teacher = ? and student_id = ?", block, name, subsection, teacher, student_id)
-	print("user {} un-waitlisted class {}, {}, {}, {}, note: {}".format(user, block, name, subsection, teacher, note))
+	print("user {} un-waitlisted class {}, {}, {}, {}".format(user, block, name, subsection, teacher))
 	return {}
 
 
