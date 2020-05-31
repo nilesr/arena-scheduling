@@ -444,3 +444,18 @@ mark {
   border-radius: 50px;
   background-color: white;
 }
+
+#refresh {
+  position : fixed;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  border-top: 1px solid grey;
+  border-right: 1px solid grey;
+  color: grey;
+  font-size: 75%;
+  border-top-right-radius: 10px;
+  padding-top: 3px;
+  padding-right: 10px;
+  cursor: pointer;
+}

@@ -126,16 +126,15 @@ def put_ticket(db, user):
 	if r.remaining_slots <= 0:
 		abort(400, "That class is full. Please use the waitlist.")
 	
-	if r.locked == 1:
+	if r.locked != 0:
 		abort(400, "That class is closed to enrollment. It has {} remaining slot{} which will be taken from the waitlist".format(r.remaining_slots, '' if r.remaining_slots == 1 else 's'))
 
-	row = query(db, "insert into student_schedules (student_id, block, class_name, subsection, teacher) values (?, ?, ?, ?, ?)", user, block, name, subsection, teacher)
-	
-	# We're now out of slots
-	if r.remaining_slots == 1:
-		query(db, "update classes set locked = 1 where name = ? and teacher = ? and block = ?", name, teacher, block)
-	
-	db.commit()
+	with db:
+		row = query(db, "insert into student_schedules (student_id, block, class_name, subsection, teacher) values (?, ?, ?, ?, ?)", user, block, name, subsection, teacher)
+		
+		# We're now out of slots
+		if r.remaining_slots == 1:
+			query(db, "update classes set locked = 1 where name = ? and teacher = ? and block = ?", name, teacher, block)
 
 	return {"ticket": row}
 
