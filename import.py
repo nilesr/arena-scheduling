@@ -8,9 +8,9 @@ db = get_db()
 
 c = db.cursor()
 def esc(t):
-	return t.replace("US/VA", "US_VA").replace("VA/US", "VA_US")
+	return t.replace("US/VA", "US_VA").replace("VA/US", "VA_US").replace("Film/Video", "Film_Video")
 def unesc(t):
-	return t.replace("US_VA", "US/VA").replace("VA_US", "VA/US")
+	return t.replace("US_VA", "US/VA").replace("VA_US", "VA/US").replace("Film_Video", "Film/Video")
 category = 0
 for row in csv.reader(open("/home/niles/schedule.csv")):
 	if row[1].strip() == "" or row[3].strip() == "":
