@@ -66,6 +66,12 @@ There is additionally a view that returns all the rows in classes, with an added
 
 There are also a few tables for comments and waitlisted students and stuff - they can be removed if you want to adapt this to a different use.
 
+### Locked classes
+
+Users can waitlist themselves for a class, but it's a manual process that the principal has to intervene in to fix the student's schedule, and it doesn't take place until after arena scheduling is finished.
+
+Ethan pointed out that if someone had to waitlist themselves for a class, then someone in the class dropped it, and someone else took the spot before the waitlisted person could add it for real, then they would be pretty upset. We didn't want to deal with the nightmare of migrating people from the waitlist onto the real schedule when someone drops, so to fix this problem, once a class is full, it "locks", and people can still drop it, but even if people drop it and it has free spaces, nobody else can add it (only waitlist).
+
 ### Authentication and user data
 
 Users login via OAuth with their google accounts. The @apsva.us suffix is stripped off, and the bits before it are used as the student ID. If it looks like a number, they're a student, and if it has any other characters, they're a teacher. 
@@ -130,6 +136,7 @@ However the second row will create 10 rows, 2 for each block. Each row will have
 
 Spaces and semicolons are ignored in the list of blocks, but commas aren't (yes, we accidentally created a class offered at the block ",")
 
+If you have classes named "AP Chemistry (Part 1)", "AP Chemistry (Part 2)", or "AP Biology (part 1)" and "AP Biology (Part 2)", then the website will loudly complain if someone is in an odd number of them. This will hopefully alert people if they add part 1 without part 2, but technically it will stop complaining if you add bio 1 and chem 2, or vice versa. I trust hb students to figure it out.
 
 Student importing is eaiser. Each row looks like this
 
