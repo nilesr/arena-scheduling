@@ -82,7 +82,7 @@ If they're a student, and no row exists in `students`, the login is denied. If t
 
 Teachers have full admin rights and can remove any student from any class. This is needed for some corrections.
 
-To set up google authentication, you need to go to the google developer console and press buttons. I don't remember which buttons. Put your client secret into a file called `client_secret.txt` and the server might start. If you actually created a new google thingy for it, you'll also need to put your client id in `oauth.py`. You ALSO need to update the `REDIRECT_URI` in oauth.py to run the server on anything other than localhost:8080. The URI you put in there NEEDS to be accessible to anyone who is going to log in.
+To set up google authentication, you need to go to the google developer console and press buttons. Just follow step 1 [here](https://developers.google.com/identity/protocols/oauth2). Steps 2 thru X are done by the code in oauth.py and don't require any manual intervention. Put your client secret into a file called `client_secret.txt` and the server might start. If you actually created a new google thingy for it, you'll also need to put your client id in `oauth.py`. You ALSO need to update the `REDIRECT_URI` in oauth.py to run the server on anything other than localhost:8080. The URI you put in there NEEDS to be accessible to anyone who is going to log in.
 
 ### Modifying the javascript
 
