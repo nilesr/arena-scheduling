@@ -101,6 +101,7 @@ The final export of all the student schedules is actually a union of both the `s
 
 - `pip install -r requirements.txt`
 - Set up oauth in `client_secret.txt` and `oauth.py` as described in "authentication and user data"
+- `make` (this will be fun to debug if it fails)
 - `python app.py`
 
 The app will now probably be running at `localhost:8080` with no users and no classes.
@@ -128,13 +129,13 @@ Columns are:
 - room number
 - cap (maximum number of students)
 
-Empty columns indicate a move to the next category. The categories are in `js/categories.js`
+A row with all empty columns indicates a move to the next category. The categories are in `js/categories.js`. So in the example above, you might want to set the first category to "English", and the second category to "Social Studies"
 
 Class names with slashes in them indicate subsections. For example, the first row will create 5 rows in `classes` (one for each block, A, C, E, F and G). Each row will have the name "English 9" with subsection "" and the course code 21XXX.
 
 However the second row will create 10 rows, 2 for each block. Each row will have the name "English 10/AP Language", and will EITHER have a subsection of "English 10" and course code of 21XXX, or a subsection of "AP Language" and a subsection of 31XXX. If the course code does not have slashes in it, the same code is used for all subsections.
 
-Spaces and semicolons are ignored in the list of blocks, but commas aren't (yes, we accidentally created a class offered at the block ",")
+Spaces and semicolons are ignored in the list of blocks, but commas aren't (yes, we discovered this after accidentally creating a class offered at the block ",")
 
 If you have classes named "AP Chemistry (Part 1)", "AP Chemistry (Part 2)", or "AP Biology (part 1)" and "AP Biology (Part 2)", then the website will loudly complain if someone is in an odd number of them. This will hopefully alert people if they add part 1 without part 2, but technically it will stop complaining if you add bio 1 and chem 2, or vice versa. I trust hb students to figure it out.
 
