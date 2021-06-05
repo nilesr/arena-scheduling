@@ -116,13 +116,6 @@ def init_db():
 	""")
 	c.execute("create index if not exists sessions_session_id on sessions (session_id);")
 	c.execute("""
-	create view if not exists classes_avail as
-	select c.name, c.block, c.subsection, c.teacher, c.cap, c.course_code, c.room, c.category, c.locked,
-	  c.cap-(select count(*) from student_schedules ss where ss.block = c.block and ss.class_name = c.name and ss.teacher = c.teacher) as remaining_slots,
-		(select count(*) from waitlist w where w.block = c.block and w.name = c.name and w.teacher = c.teacher and w.subsection = c.subsection) as waitlist
-	from classes c; 
-	""")
-	c.execute("""
 	create table if not exists waitlist (
 		student_id int not null, -- FK to students
 		block char not null,
@@ -132,6 +125,13 @@ def init_db():
 		note text not null,
 		foreign key(student_id) references students(student_id)
 	);
+	""")
+	c.execute("""
+	create view if not exists classes_avail as
+	select c.name, c.block, c.subsection, c.teacher, c.cap, c.course_code, c.room, c.category, c.locked,
+	  c.cap-(select count(*) from student_schedules ss where ss.block = c.block and ss.class_name = c.name and ss.teacher = c.teacher) as remaining_slots,
+		(select count(*) from waitlist w where w.block = c.block and w.name = c.name and w.teacher = c.teacher and w.subsection = c.subsection) as waitlist
+	from classes c; 
 	""")
 	c.execute("""
 	create table if not exists comments (

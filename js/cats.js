@@ -5,7 +5,6 @@ var catnames = [
 	"Science",
 	"French",
 	"Spanish",
-	"German",
 	"Latin",
 	"Chinese and Arabic",
 	"American Sign Language",
