@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import requests
-CLIENT_ID = "349911277483-8flsja8q706v0jc4t5c45trk9u4b603n.apps.googleusercontent.com"
+CLIENT_ID = "939439849082-e5pjgdqksge5moccdlfvs9tr1bbm9ng7.apps.googleusercontent.com"
 REDIRECT_URI = "http://localhost:8080/authn"
 SCOPE = "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"
 CLIENT_SECRET = open("client_secret.txt").read().strip()

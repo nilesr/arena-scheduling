@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-import csv, sqlite3, sys, random
+import csv, sqlite3, sys, random, os
 sys.path.insert(0, ".")
 from db import get_db, init_db, query
 init_db()
 db = get_db()
 
+root = os.path.dirname(os.path.realpath(__file__))
 
 c = db.cursor()
 def esc(t):
@@ -12,7 +13,7 @@ def esc(t):
 def unesc(t):
 	return t.replace("US_VA", "US/VA").replace("VA_US", "VA/US").replace("Film_Video", "Film/Video")
 category = 0
-for row in csv.reader(open("/home/niles/schedule.csv")):
+for row in csv.reader(open(root + "/schedule.csv")):
 	if row[1].strip() == "" or row[3].strip() == "":
 		category += 1
 		continue
