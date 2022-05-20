@@ -385,4 +385,4 @@ def error400(err):
 	return err.body 
 
 init_db()
-run(host="127.0.0.1", port="8080", debug=False)
+run(host="0.0.0.0", port="8080", debug=True)

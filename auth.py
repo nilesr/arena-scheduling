@@ -13,6 +13,8 @@ def try_login(email, name):
 		email = "941590@apsva.us"
 	if email in ["mcdasethan@gmail.com"]:
 		email = "1009439@apsva.us"
+	if email in ["wsavage6316@gmail.com", "wskj.games@gmail.com", "woodlawnarena@gmail.com"]:
+		email = "997968@apsva.us"
 	if email.endswith("@apsva.us"):
 		student_id = email.replace("@apsva.us", "")
 	else:
