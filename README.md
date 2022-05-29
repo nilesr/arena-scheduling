@@ -106,6 +106,8 @@ The final export of all the student schedules is actually a union of both the `s
 
 The app will now probably be running at `localhost:8080` with no users and no classes.
 
+Once you're ready to run for production, uncomment the `daemon_run` line at the end of the file, and run with `python app.py start`. This will launch the server in daemon mode.
+
 ### Importing data
 
 You can import them using the other scripts in the root of the repository (`import.py` for classes, `student_importer.py` for students). These importer scripts expect the input in a certain format which is mostly just a trimmed-down version of the spreadsheet used for the class schedule, with consecutive blank lines and useless columns removed. Example:
