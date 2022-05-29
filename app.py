@@ -55,6 +55,7 @@ def login():
 @route("/authn")
 def authn():
 	email, name = oauth.get_email(request)
+	print(name)
 	succ, stat = auth.try_login(email, name)
 	if not succ:
 		abort(400, stat)
