@@ -9,14 +9,14 @@ db = get_db()
 root = os.path.dirname(os.path.realpath(__file__))
 
 base_time = 1654695000 #remember to update. current: wed jun 08 2022
-tdeltasec = 60 * 3
+tdeltasec = 30 * 3  #180 for daily, 90 for half day blocks
 
 grades = {8: [], 9: [], 10: [], 11: []}
 for row in csv.reader(open(root + "/students.csv")):
     grades[int(row[0])].append(row[1])
 
 students = []
-for grade in range(8, 12):
+for grade in range(8, 12):		#TODO fix :D
     offset = 0
     days = 0
     if grade == 9  or grade == 8:
@@ -27,7 +27,7 @@ for grade in range(8, 12):
     dsec = days * 3600 * 24
     random.shuffle(grades[grade])
     for i, student in enumerate(grades[grade]):
-        time_allowed_in = base_time + dsec + (i * tdeltasec) + offset
+        time_allowed_in = base_time + dsec + (i * tdeltasec) + offset  #unix time lowkey stupid
         students.append([student, time_allowed_in, i])
 
 c = db.cursor()
