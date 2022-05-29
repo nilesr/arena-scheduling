@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os, sys, time, io, csv
+from bottledaemon import daemon_run
 from bottle import request, response, route, static_file, post, run, abort, error, put, delete, redirect
 sys.path.insert(0, ".")
 import auth, oauth
@@ -385,4 +386,5 @@ def error400(err):
 	return err.body 
 
 init_db()
-run(host="0.0.0.0", port="8080", debug=True)
+#run(host="0.0.0.0", port="8080", debug=True)        #dev
+daemon_run(host="0.0.0.0", port="8080")              #prod

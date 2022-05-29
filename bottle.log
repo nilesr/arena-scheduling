@@ -1,0 +1,6 @@
+Bottle v0.12.19 server starting up (using WSGIRefServer())...
+Listening on http://0.0.0.0:8080/
+Hit Ctrl-C to quit.
+
+127.0.0.1 - - [29/May/2022 03:18:52] "GET /tickets HTTP/1.0" 200 121
+127.0.0.1 - - [29/May/2022 03:18:52] "GET /classes HTTP/1.0" 200 35275
