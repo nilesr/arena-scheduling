@@ -2,5 +2,33 @@ Bottle v0.12.19 server starting up (using WSGIRefServer())...
 Listening on http://0.0.0.0:8080/
 Hit Ctrl-C to quit.
 
-127.0.0.1 - - [29/May/2022 03:18:52] "GET /tickets HTTP/1.0" 200 121
-127.0.0.1 - - [29/May/2022 03:18:52] "GET /classes HTTP/1.0" 200 35275
+127.0.0.1 - - [29/May/2022 03:23:56] "GET / HTTP/1.0" 304 0
+127.0.0.1 - - [29/May/2022 03:23:56] "GET /tickets HTTP/1.0" 200 121
+127.0.0.1 - - [29/May/2022 03:23:56] "GET /classes HTTP/1.0" 200 35275
+127.0.0.1 - - [29/May/2022 03:24:00] "GET /tickets HTTP/1.0" 200 121
+127.0.0.1 - - [29/May/2022 03:24:00] "GET /classes HTTP/1.0" 200 35275
+127.0.0.1 - - [29/May/2022 03:24:01] "GET /tickets HTTP/1.0" 200 121
+127.0.0.1 - - [29/May/2022 03:24:01] "GET /classes HTTP/1.0" 200 35275
+127.0.0.1 - - [29/May/2022 03:24:01] "GET /tickets HTTP/1.0" 200 121
+127.0.0.1 - - [29/May/2022 03:24:01] "GET /classes HTTP/1.0" 200 35275
+127.0.0.1 - - [29/May/2022 03:24:23] "GET / HTTP/1.0" 304 0
+127.0.0.1 - - [29/May/2022 03:24:23] "GET /tickets HTTP/1.0" 200 121
+127.0.0.1 - - [29/May/2022 03:24:23] "GET /classes HTTP/1.0" 200 35275
+127.0.0.1 - - [29/May/2022 03:24:28] "GET /css/vendor/milligram.min.css.map HTTP/1.0" 404 746
+127.0.0.1 - - [29/May/2022 03:25:35] "GET /tickets HTTP/1.0" 200 121
+127.0.0.1 - - [29/May/2022 03:25:35] "GET /classes HTTP/1.0" 200 35275
+127.0.0.1 - - [29/May/2022 03:25:38] "GET / HTTP/1.0" 200 982
+127.0.0.1 - - [29/May/2022 03:25:38] "GET /css/vendor/milligram.min.css HTTP/1.0" 200 9670
+127.0.0.1 - - [29/May/2022 03:25:38] "GET /css/style.css HTTP/1.0" 200 7421
+127.0.0.1 - - [29/May/2022 03:25:38] "GET /final.min.js HTTP/1.0" 200 359210
+127.0.0.1 - - [29/May/2022 03:25:38] "GET /tickets HTTP/1.0" 200 121
+127.0.0.1 - - [29/May/2022 03:25:38] "GET /classes HTTP/1.0" 200 35275
+127.0.0.1 - - [29/May/2022 03:25:38] "GET /favicon.ico HTTP/1.0" 404 725
+127.0.0.1 - - [29/May/2022 03:26:01] "GET / HTTP/1.0" 304 0
+127.0.0.1 - - [29/May/2022 03:26:01] "GET /final.min.js HTTP/1.0" 304 0
+127.0.0.1 - - [29/May/2022 03:26:01] "GET /tickets HTTP/1.0" 200 121
+127.0.0.1 - - [29/May/2022 03:26:01] "GET /classes HTTP/1.0" 200 35275
+127.0.0.1 - - [29/May/2022 03:26:47] "GET /tickets HTTP/1.0" 200 121
+127.0.0.1 - - [29/May/2022 03:26:47] "GET /classes HTTP/1.0" 200 35275
+127.0.0.1 - - [29/May/2022 03:27:33] "GET /tickets HTTP/1.0" 200 121
+127.0.0.1 - - [29/May/2022 03:27:33] "GET /classes HTTP/1.0" 200 35275
