@@ -5,8 +5,6 @@
       "@babel/env",
       {
         "targets": "> 0.25%, not dead",
-        "useBuiltIns": "usage",
-	"corejs": "3.6.5",
       }
     ],
     ["@babel/preset-react"],
