@@ -1,3 +1,4 @@
+*.pid*
 __pycache__
 schedule.db
 schedule.db.sqbpro
