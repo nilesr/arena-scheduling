@@ -1,4 +1,5 @@
 *.pid*
+*.swp
 __pycache__
 schedule.db
 schedule.db.sqbpro
