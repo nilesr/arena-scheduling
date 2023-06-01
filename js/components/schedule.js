@@ -1,16 +1,16 @@
 var rows = [
 	//["6AM to 9:15", "*", "*Planning", "Staff Meeting", "*Planning", "*Planning"],
 	["", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"],
-	["9:24 to 10:10", "A", "Town Meeting", "A", "A", "A"],
-	["10:15 to 11:00", "B", "B", "B", "I", "B"],
-	["11:05 to 11:50", "C", "D", "C", "C", "C"],
-	["11:50 to 12:25", "LUNCH", "LUNCH", "LUNCH", "LUNCH", "LUNCH"],
-	["12:25 to 1:10", "D", "E", "E", "D", "D"],
-	["1:15 to 2:00", "F", "F", "F", "E", "E"],
-	["2:00 to 2:25", "I", "TA", "I", "TA", "I"],
-	["2:25 to 3:10", "G", "G", "G", "F", "G"],
+	["9:00 to 9:48", "A", "I", "A", "A", "A"],
+	["9:53 to 10:41", "B", "B", "B", "Town Meeting", "B"],
+	["10:46 to 11:34", "C", "C", "C", "D", "C"],
+	["11:34 to 12:14", "LUNCH", "LUNCH", "LUNCH", "LUNCH", "LUNCH"],
+	["12:14 to 1:02", "D", "D", "E", "E", "D"],
+	["1:02 to 1:55", "F", "E", "F", "F", "E"],
+	["1:55 to 2:09", "I", "TA", "I", "TA", "I"],
+	["2:09 to 2:57", "G", "F", "G", "G", "G"],
 	["SPORTS BUS"], // .sport
-	["3:15 to 4:06", "TA", "H", "H", "H", "H"]
+	["3:02 to 3:50", "H", "H", "TA", "H", "H"]
 ]
 var colors = [
 	"#FFF3CF", // A
