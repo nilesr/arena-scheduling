@@ -1,6 +1,7 @@
 *.pid*
 *.swp
 ip-*
+nohup.out
 __pycache__
 schedule.db
 schedule.db.sqbpro

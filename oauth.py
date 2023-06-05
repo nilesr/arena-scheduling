@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import requests
 CLIENT_ID = "98187759209-6n19ubaf0k70aq4evn67av913m4gh7ho.apps.googleusercontent.com"
-REDIRECT_URI = "http://ec2-13-59-149-235.us-east-2.compute.amazonaws.com/authn"
+REDIRECT_URI = "http://ec2-3-12-84-172.us-east-2.compute.amazonaws.com/authn"
 SCOPE = "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email"
 CLIENT_SECRET = open("client_secret.txt").read().strip()
 openid_config = requests.get("https://accounts.google.com/.well-known/openid-configuration").json()
